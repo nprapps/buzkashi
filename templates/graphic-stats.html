@@ -1,0 +1,65 @@
+<div id="graphic-stats">
+    <div class="row graphic">
+        <div class="col-md-8 col-md-offset-2">
+    
+            <h5>{{ COPY.graphics.stats_year_hed }}</h5>
+            <h6>{{ COPY.graphics.stats_progress }}</h6>
+            
+            <div id="graphic-stats-year"></div>
+
+            <div class="source">
+                <p>{{ COPY.graphics.stats_year_source }}</p>
+            </div>
+
+        </div><!--/col-->
+    </div><!--/row-->
+
+    <div class="row graphic">
+        <div class="col-md-8 col-md-offset-2">
+    
+            <h5>{{ COPY.graphics.stats_conflict_hed }}</h5>
+
+            <table>
+                <tr>
+                    <th class="conflict">Conflict</th>
+                    <th class="amt">Identified</th>
+                    <th class="mia amt">Still&nbsp;MIA</th>
+                </tr>
+                <tr class="ww2">
+                    <td class="conflict">World&nbsp;War&nbsp;II</td>
+                    <td class="idnum amt">228</td>
+                    <td class="mia amt">35,000*</td>
+                </tr>
+                <tr class="korea">
+                    <td class="conflict">Korea</td>
+                    <td class="idnum amt">230</td>
+                    <td class="mia amt">7,891</td>
+                </tr>
+                <tr class="vietnam">
+                    <td class="conflict">Vietnam</td>
+                    <td class="idnum amt">266</td>
+                    <td class="mia amt">1,643</td>
+                </tr>
+                <tr class="other">
+                    <td class="conflict">Other</td>
+                    <td class="idnum amt">13</td>
+                    <td class="mia amt">132</td>
+                </tr>
+                <tfoot>
+                <tr>
+                    <td class="conflict">Total</td>
+                    <td class="idnum amt">750</td>
+                    <td class="mia amt">44,666</td>
+                </tr>
+            </table>
+        
+            <div class="footnote">
+                <p>{{ COPY.graphics.stats_conflict_footnote }}</p>
+            </div>
+            <div class="source">
+                <p>{{ COPY.graphics.stats_conflict_source }}</p>
+            </div>
+
+        </div><!--/col-->
+    </div><!--/row-->
+</div>
