@@ -18,8 +18,7 @@
                 <div class="titlecard-content">
                     <ul class="credit">
                         <li>
-                            <a href="http://www.npr.org"><img src="assets/img/npr-logo.png" class="npr-logo" alt="NPR" /></a>
-                            <a href="http://www.propublica.org"><img src="assets/img/jpac/logo-propublica.svg" class="propublica-logo" alt="ProPublica" /></a>
+                            <a href="http://www.npr.org"><img src="assets/img/npr-logo.png" class="npr-logo" alt="NPR"></a>
                         </li>
                         <li>{{ COPY.attribution.byline_top }}</li>
                     </ul>
@@ -61,7 +60,7 @@
     </ul>
 </div>
 <section id="content">
-        {% for row in COPY.jpac %}
+        {% for row in COPY.primary %}
 
             {% if row.template == 'chapter' %}
                 {% if row.first_chapter != 'yes' %}
@@ -163,18 +162,6 @@
                         <a class="download-audio" id="download-audio" href="assets/audio/part-2.mp3" target="_blank"><i class="fa fa-download"></i> Download</a>
                     </div>
 
-                </div>
-            </div>
-
-            <div class="story-wrapper propublica">
-                <div class="story-image">
-                     <a href="{{ COPY.attribution.partner_link }}"><img src="{{ COPY.attribution.partner_img }}" alt="{{ COPY.attribution.partner_hed }}" class="promo-thumb" /></a>
-                </div>
-                <div class="story-text">
-                    <h6>{{ COPY.attribution.partner_intro }}</h6>
-                    <h3><a href="{{ COPY.attribution.partner_link }}">{{ COPY.attribution.partner_hed }}</a></h3>
-                    <p>{{ COPY.attribution.partner_desc }}</p>
-                    <p class="more"><b><a href="{{ COPY.attribution.partner_link }}">Read The Story&nbsp;<i class="fa fa-external-link"></i></a></b></p>
                 </div>
             </div>
 
