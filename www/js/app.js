@@ -110,18 +110,7 @@ var on_window_resize = function() {
     //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
 
-    // redraw the graphics
-    if (graphic_data == null) {
-        d3.csv(graphic_data_url, function(error, data) {
-            graphic_data = data;
-            graphic_data.forEach(function(d) {
-                d.year = d3.time.format('%Y').parse(d.year);
-            });
-            drawGraphic();
-        });
-    } else {
-        drawGraphic();
-    }
+   
 
     // set the image grid spacing properly
     fix_image_grid_spacing();
@@ -459,76 +448,6 @@ var set_up_audio = function(selector, part) {
 };
 
 
-/* graphics */
-function drawGraphic() {
-    // clear out existing graphic
-    $graphic_stats_year.empty();
-
-    var margin = { top: 10, right: 0, bottom: 35, left: 30 };
-    var width = $graphic_stats_year.width() - margin.left - margin.right;
-    var height = graphic_height;
-    var num_bars = graphic_data.length;
-
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], .1)
-        .domain(graphic_data.map(function(d) { return d.year; }));
-
-    var y = d3.scale.linear()
-        .range([height, 0])
-        .domain([0, d3.max(graphic_data, function(d) {
-            var n = parseInt(d.amt);
-            return Math.ceil(n/5) * 5; // round to next 5
-        })]);
-
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient('bottom')
-        .tickSize(6,0)
-        .tickFormat(d3.time.format('\u2019' + '%y'));
-
-    var num_ticks = num_bars / 2;
-
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient('left')
-        .ticks(num_ticks);
-
-    var y_axis_grid = function() { return yAxis; }
-
-    var svg = d3.select('#graphic-stats-year').append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(xAxis);
-
-    svg.append('g')
-        .attr('class', 'y axis')
-        .call(yAxis);
-
-    svg.append('g')
-        .attr('class', 'y grid')
-        .call(y_axis_grid()
-            .tickSize(-width, 0)
-            .tickFormat('')
-        );
-
-    svg.append('g')
-        .attr('class', 'bars')
-        .selectAll('rect')
-            .data(graphic_data)
-        .enter().append('rect')
-            .attr("x", function(d) { return x(d.year); })
-            .attr("y", function(d) { return y(d.amt); })
-            .attr("width", x.rangeBand())
-            .attr("height", function(d){ return height - y(d.amt); });
-}
-
-
 $(document).ready(function() {
     $container = $('#content');
     $titlecard = $('.titlecard');
@@ -551,6 +470,11 @@ $(document).ready(function() {
     $('.horseroll').scrollMotion({
     	top : 0,
     	bottom : 1000 	
+    });
+    
+    $('.coat').scrollMotion({
+    	top : 1000,
+    	bottom : 2000	
     });
 
     //share popover
