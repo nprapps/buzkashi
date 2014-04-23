@@ -172,6 +172,25 @@ a:hover, a:active {
     100% {opacity: 0;}
 }
 
+
+
+.horseroll {
+	width:100%;
+	height:auto;
+	overflow:hidden;
+	/* works well with absolute positioning
+	position:absolute;
+	top:0;
+	left: 0;
+	z-index: 10; */
+}
+
+.horseroll img {
+    width: 100%;
+    display: block;
+    height: auto;
+}
+
 //Titlecard
 
 @-webkit-keyframes titleFade {
@@ -642,6 +661,18 @@ a:hover, a:active {
 
         .side-by-side {
             .make-md-column(6);
+        }
+    }
+    
+    //full bleed images
+    .image-sequence {
+        position: relative;
+        @media @screen-small-above {
+            margin: 60px 0 30px 0;
+            height: 1000px;
+            overflow: auto;
+            background:url('../assets/img/titlecard.jpg') top right no-repeat; background-position:fixed;
+            background-size: cover;
         }
     }
 

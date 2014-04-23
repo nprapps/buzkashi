@@ -547,6 +547,11 @@ $(document).ready(function() {
     $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
+    
+    $('.horseroll').scrollMotion({
+    	top : 0,
+    	bottom : 1000 	
+    });
 
     //share popover
     $(function () {
