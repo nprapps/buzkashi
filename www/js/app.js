@@ -174,7 +174,7 @@ var on_begin_click = function() {
     }
 
     // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 800, scrollTarget: '#intro' });
+    $.smoothScroll({ speed: 2000, scrollTarget: '#content' });
 
     // Don't do anything else.
     return false;
@@ -469,7 +469,7 @@ $(document).ready(function() {
     
     $('.horseroll').scrollMotion({
     	top : 0,
-    	bottom : 1000 	
+    	bottom : 200	
     });
     
     $('.coat').scrollMotion({
