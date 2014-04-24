@@ -172,17 +172,11 @@ a:hover, a:active {
     100% {opacity: 0;}
 }
 
-
-
 .horseroll {
-	width:100%;
+	width:50%;
+	margin: 0 auto;
 	height:auto;
 	overflow:hidden;
-	/* works well with absolute positioning
-	position:absolute;
-	top:0;
-	left: 0;
-	z-index: 10; */
 }
 
 .horseroll img {
@@ -599,6 +593,36 @@ a:hover, a:active {
         margin-bottom: 20px;
         @media @screen-small-above {
             margin-bottom: 0;
+        }
+    }
+    
+    //map
+    
+    .map {
+        background-color: #333;
+        padding: 50px 0;
+        
+        h2 {
+            font-size: 70px;
+            color: #eee;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        p {
+            max-width: 800px;
+            color: #ccc;
+            margin: 0 auto;
+            padding-bottom: 50px;
+            text-align: center;
+            font-size: 24px;
+        }
+        
+        img {
+            width: 50%;
+            margin: auto 30%;
+            opacity: .8;
         }
     }
 
