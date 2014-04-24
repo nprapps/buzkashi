@@ -2,6 +2,7 @@
 @import "less/lib/font-awesome/font-awesome";
 //@import "less/adhesion";
 @import "less/lib/prefixer";
+@import "less/comments";
 //@import "less/lib/animate";
 
 
@@ -489,6 +490,28 @@ a:hover, a:active {
                     color: #707070;
                 }
             }
+
+            &.comments {
+                a {
+                    background: #ccc;
+                    min-width: 20px;
+                    margin-top: 5px;
+
+                    &:after {
+                        border-color: transparent #ccc transparent transparent;
+                    }
+
+                    &:hover {
+                        background: @brand-primary;
+                        color: #fff;
+
+                        &:after {
+                            border-color: transparent @brand-primary transparent transparent;
+                        }
+                    }
+                }
+            }
+
             &.active{
 
                 a {
