@@ -501,11 +501,11 @@ $(document).ready(function() {
     
     $('.horseroll').scrollMotion({
     	top : 0,
-    	bottom : 900	
+    	bottom : 200	
     });
     
     $('.horseroll2').scrollMotion({
-    	top : 0,
+    	top : 200,
     	bottom : 900	
     });
     
