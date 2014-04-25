@@ -26,7 +26,7 @@
                     <h2>{{ COPY.attribution.subhed_top }}</h2>
 
                     <div class="begin-bar">
-                        <p><strong>Begin</strong></p>
+                        <p><strong><i class="fa fa-chevron-down"></i></strong></p>
                     </div>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -35,17 +35,21 @@
     <div class="titlecard-mask animated fadeOut"></div>
     <div class="titlecard">
         <div class="horseroll">
-            <img src="assets/img/horseroll/two.jpg" />
-            <img src="assets/img/horseroll/three.jpg" />
-            <img src="assets/img/horseroll/four.jpg" />
-            <img src="assets/img/horseroll/five.jpg" />
-        	<img src="assets/img/horseroll/six.jpg" />
-        	<img src="assets/img/horseroll/seven.jpg"/>
-        	<img src="assets/img/horseroll/eight.jpg" />
-        	<img src="assets/img/horseroll/nine.jpg"/>
-        	<img src="assets/img/horseroll/ten.jpg"  />
+            <img src="assets/img/scrum/scrum01.jpg">
+            <img src="assets/img/scrum/scrum02.jpg">
+            <img src="assets/img/scrum/scrum03.jpg">
+            <img src="assets/img/scrum/scrum04.jpg">
+            <img src="assets/img/scrum/scrum05.jpg">
+            <img src="assets/img/scrum/scrum06.jpg">
+            <img src="assets/img/scrum/scrum07.jpg">
+            <img src="assets/img/scrum/scrum08.jpg">
+            <img src="assets/img/scrum/scrum09.jpg">
+            <img src="assets/img/scrum/scrum10.jpg">
+            <img src="assets/img/scrum/scrum11.jpg">
+            <img src="assets/img/scrum/scrum12.jpg">
+            <img src="assets/img/scrum/scrum13.jpg">
+            <img src="assets/img/scrum/scrum14.jpg">
         </div>
-        
     </div>
 
     <div class="caption-text">
@@ -58,11 +62,6 @@
         <li class="top-nav active">
             <a href="#top"><strong>Home</strong> <i class="fa fa-home"></i></a>
         </li>
-        {% for row in COPY.nav %}
-            <li class="{{row[1]}}-nav">
-                <a href="#{{row[1]}}"><strong>{{ row[0] }}</strong><i class="fa fa-circle"></i></a>
-            </li>
-        {% endfor %}
         <li class="listen-nav">
             <a href="#audio-story"><strong>Listen to the full story</strong> <i class="fa fa-circle"></i></a>
         </li>
@@ -76,57 +75,20 @@
         </li>
     </ul>
 </div>
-<section id="content">
-
-
-
-
-
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-        
-        <div class="coat">
-        <img src="assets/img/coat/coat1.jpg" />
-        <img src="assets/img/coat/coat2.jpg" />
-        </div>
-            
-            
-        </div><!-- /6 -->
-        <div class="col-md-4">
-        <h4>Coat Description</h4>
-        
-        
-        </div><!-- /6 -->
-    </div><!-- /row -->
-</div><!-- /container -->
-
-<div class="map">
-<h2>The Venue</h2>
-<p>Afghanistan's traditional sport is one played predominantly in northern Afghanistan. NPR traveled to Shebergan in Northern Afghanistan to attend a Buzkashi match.</p>
-    <img src="assets/img/map-sheberghan-1000.svg" />
-</div>
-
-<!--
-    <div class="image-sequence">
-        <div style="background-color: red; opacity: .4; margin-top: 4000px; height: 500px; width: 100%;">ok</div>
-    </div>
--->
-
+<div id="content">
 
         {% for row in COPY.primary %}
 
             {% if row.template == 'chapter' %}
                 {% if row.first_chapter != 'yes' %}
-                    </section>
+                    <!--</section>-->
                 {% endif %}
             {% endif %}
+            
             {% include "%s.html"|format(row.template) ignore missing %}
 
         {% endfor %}
-</section>
 
-<!-- content -->
 
 <div id="audio-story">
     <div class="container">
@@ -232,7 +194,10 @@
             </div><!--/row-->
     </div><!--/container-->
 </div><!--/audio-story -->
-</section>
+
+</div>
+<!-- /content -->
+
 {% endblock %}
 {% block extra_foot_js %}
 {% endblock %}

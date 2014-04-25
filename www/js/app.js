@@ -109,6 +109,8 @@ var on_window_resize = function() {
     $titlecard_wrapper.height(w_height + 'px');
     //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
+    
+    size_filmstrip();
 
    
 
@@ -174,7 +176,7 @@ var on_begin_click = function() {
     }
 
     // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 2000, scrollTarget: '#content' });
+    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
 
     // Don't do anything else.
     return false;
@@ -447,6 +449,36 @@ var set_up_audio = function(selector, part) {
     });
 };
 
+//filmstrip
+function setup_css_animations() {
+    var prefixes = [ '-webkit-', '-moz-', '-o-', '' ];
+    var keyframes = '';
+    var filmstrip_steps = 14;
+    for (var i = 0; i < prefixes.length; i++) {
+        var filmstrip = '';
+        for (var f = 0; f < filmstrip_steps; f++) {
+            var current_pct = f * (100/filmstrip_steps);
+            filmstrip += current_pct + '% {background-position:0 -' + (f * 100) + '%;' + prefixes[i] + 'animation-timing-function:steps(1);}';
+        }
+        keyframes += '@' + prefixes[i] + 'keyframes filmstrip {' + filmstrip + '}';
+    }
+    
+    var s = document.createElement('style');
+    s.innerHTML = keyframes;
+    $('head').append(s);
+}
+
+var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
+var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
+var filmstrip_scrum_aspect_width = 800;
+var filmstrip_scrum_aspect_height = 450;
+
+function size_filmstrip() {
+    var filmstrip_scrum_width = $filmstrip_scrum_wrapper.width();
+    var filmstrip_scrum_height = Math.ceil((filmstrip_scrum_width * filmstrip_scrum_aspect_height) / filmstrip_scrum_aspect_width);
+    $filmstrip_scrum.width(filmstrip_scrum_width + 'px').height(filmstrip_scrum_height + 'px');
+}
+
 
 $(document).ready(function() {
     $container = $('#content');
@@ -470,6 +502,11 @@ $(document).ready(function() {
     $('.horseroll').scrollMotion({
     	top : 0,
     	bottom : 200	
+    });
+    
+    $('.horseroll2').scrollMotion({
+    	top : 200,
+    	bottom : 900	
     });
     
     $('.coat').scrollMotion({
@@ -519,6 +556,8 @@ $(document).ready(function() {
     sub_responsive_images();
 
     fix_image_grid_spacing();
+
+    setup_css_animations();
 
     $waypoints.waypoint(function(direction){
         on_waypoint(this, direction);
