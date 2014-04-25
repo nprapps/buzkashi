@@ -501,7 +501,7 @@ $(document).ready(function() {
     
     $('.horseroll').scrollMotion({
     	top : 0,
-    	bottom : 1500	
+    	bottom : 900	
     });
     
     $('.coat').scrollMotion({

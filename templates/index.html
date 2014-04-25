@@ -64,47 +64,19 @@
         </li>
     </ul>
 </div>
-<section id="content">
-
-<div class="horseroll">
-    <img src="assets/img/scrum/scrum01-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum02-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum03-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum04-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum05-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum06-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum07-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum08-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum09-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum10-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum11-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum12-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum13-16x9-d.jpg">
-    <img src="assets/img/scrum/scrum14-16x9-d.jpg">
-</div>
-
-
-<div class="map">
-<p>Afghanistan's traditional sport is one played predominantly in northern Afghanistan. NPR traveled to Shebergan in Northern Afghanistan to attend a Buzkashi match.</p>
-    <img src="assets/img/map-sheberghan-1000.svg" />
-</div>
+<div id="content">
         {% for row in COPY.primary %}
 
             {% if row.template == 'chapter' %}
                 {% if row.first_chapter != 'yes' %}
-                    </section>
+                    <!--</section>-->
                 {% endif %}
             {% endif %}
+            
             {% include "%s.html"|format(row.template) ignore missing %}
 
         {% endfor %}
-        
-<div class="filmstrip-outer-wrapper">
-    <div class="filmstrip-wrapper">
-        <div class="filmstrip animated"></div>
-    </div>
 </div>
-</section>
 
 <!-- content -->
 
