@@ -176,7 +176,7 @@ var on_begin_click = function() {
     }
 
     // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 1000, scrollTarget: '#content' });
+    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
 
     // Don't do anything else.
     return false;
@@ -500,6 +500,11 @@ $(document).ready(function() {
     $side_by_sides = $('.side-by-side-wrapper');
     
     $('.horseroll').scrollMotion({
+    	top : 0,
+    	bottom : 900	
+    });
+    
+    $('.horseroll2').scrollMotion({
     	top : 0,
     	bottom : 900	
     });
