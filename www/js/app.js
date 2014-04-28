@@ -176,7 +176,7 @@ var onBeginClick = function() {
     }
 
     // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 1000, scrollTarget: '#content' });
+    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
 
     // Don't do anything else.
     return false;
@@ -500,6 +500,11 @@ $(document).ready(function() {
 
     $('.horseroll').scrollMotion({
         top : 0,
+        bottom : 200
+    });
+
+    $('.horseroll2').scrollMotion({
+        top : 200,
         bottom : 900
     });
 
@@ -518,7 +523,7 @@ $(document).ready(function() {
     $('.share').popover({
         'selector': '',
         'placement': 'left',
-        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=America\'s effort to bring home its war dead is slow, inefficient and stymied by outdated methods, via @nprnews.&url=http://apps.npr.org/grave-science/&original_referer=@nprviz"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=http://apps.npr.org/grave-science/"><i class="fa fa-facebook-square"></i></a>',
+        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
         'html': 'true'
       });
 
