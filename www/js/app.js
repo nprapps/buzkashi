@@ -11,7 +11,7 @@ var $begin;
 var $button_download_audio;
 var $button_toggle_caption;
 var $lightbox;
-var $lightbox_image;
+var $lightboxImage;
 var $story_player_button;
 var $enlarge;
 var $intro_advance;
@@ -37,7 +37,7 @@ var story_end_1 = 673;
 var story_end_2 = 771;
 
 
-var unveil_images = function() {
+var unveilImages = function() {
     /*
     * Loads images using jQuery unveil.
     * Current depth: 3x the window height.
@@ -54,7 +54,7 @@ var unveil_images = function() {
     }
 };
 
-var sub_responsive_images = function() {
+var subResponsiveImages = function() {
     /*
     * Replaces large images with small ones for tiny devices.
     * Contains a test for non-tablet devices.
@@ -77,10 +77,10 @@ var sub_responsive_images = function() {
     }
 
     // Call unveil afterwards.
-    unveil_images();
+    unveilImages();
 };
 
-var on_window_resize = function() {
+var onWindowResize = function() {
     /*
     * Handles resizing our full-width images.
     * Makes decisions based on the window size.
@@ -109,16 +109,16 @@ var on_window_resize = function() {
     $titlecard_wrapper.height(w_height + 'px');
     //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
-    
-    size_filmstrip();
 
-   
+    sizeFilmstrip();
+
+
 
     // set the image grid spacing properly
-    fix_image_grid_spacing();
+    fixImageGridSpacing();
 };
 
-var fix_image_grid_spacing = function() {
+var fixImageGridSpacing = function() {
     _.each($side_by_sides, function(side_by_side) {
         if ($w.width() < 992) {
             if ($(side_by_side).next().hasClass('side-by-side-wrapper')) {
@@ -133,7 +133,7 @@ var fix_image_grid_spacing = function() {
     });
 };
 
-var on_story_timeupdate = function(e) {
+var onStoryTimeUpdate = function(e) {
     var this_player = e.currentTarget.id;
     var story_end;
     if (this_player == 'pop-audio_1') {
@@ -165,7 +165,7 @@ var on_story_timeupdate = function(e) {
     $(this).next().find('.current-time').text(time_text);
 };
 
-var on_begin_click = function() {
+var onBeginClick = function() {
     /*
     * Handles clicks on the begin button.
     */
@@ -182,7 +182,7 @@ var on_begin_click = function() {
     return false;
 };
 
-var button_toggle_caption_click = function() {
+var buttonToggleCaptionClick = function() {
     /*
     * Click handler for the caption toggle.
     */
@@ -190,7 +190,7 @@ var button_toggle_caption_click = function() {
     $( this ).parent( ".captioned" ).toggleClass('cap-on');
 };
 
-var on_nav_click = function(){
+var onNavClick = function(){
     /*
     * Click handler for navigation element clicks.
     */
@@ -222,23 +222,23 @@ var on_nav_click = function(){
     return false;
 };
 
-var on_lightbox_click = function() {
+var onLightboxClick = function() {
     /*
     * Click handler for lightboxed photos.
     */
     if (!Modernizr.touch) {
-        lightbox_image($(this).find('img'));
+        lightboxImage($(this).find('img'));
     }
 };
 
-var on_button_download_audio_click = function(){
+var onButtonDownloadAudioClick = function(){
     /*
     * Click handler for the download button.
     */
     _gaq.push(['_trackEvent', 'Audio', 'Downloaded story audio mp3', APP_CONFIG.PROJECT_NAME, 1]);
 };
 
-var on_story_player_button_click = function(e){
+var onStoryPlayerButtonClick = function(e){
     /*
     * Click handler for the story player "play" button.
     */
@@ -247,7 +247,7 @@ var on_story_player_button_click = function(e){
     e.data.player.jPlayer('play');
 };
 
-var on_window_scroll = function() {
+var onWindowScroll = function() {
     /*
     * Fires on window scroll.
     * Largely for handling bottom-of-page or nearly bottom-of-page
@@ -267,14 +267,14 @@ var on_window_scroll = function() {
     }
 };
 
-var on_intro_advance_click = function() {
+var onIntroAdvanceClick = function() {
     /*
     * Click handler on intro advance.
     */
     $.smoothScroll({ speed: 800, scrollTarget: '#intro-copy' });
 };
 
-var on_waypoint = function(element, direction) {
+var onWaypointReached = function(element, direction) {
     /*
     * Event for reaching a waypoint.
     */
@@ -304,7 +304,7 @@ var on_waypoint = function(element, direction) {
         $(element).addClass('chapter-active');
     }
 };
-var lightbox_image = function(element) {
+var lightboxImage = function(element) {
     /*
     * We built our own lightbox function.
     * We wanted more control over transitions and didn't
@@ -322,8 +322,8 @@ var lightbox_image = function(element) {
     var $el = $(element);
 
     // Get the clicked image and add it to lightbox.
-    $lightbox.append('<img src="' + $el.attr('src') + '" id="lightbox_image">');
-    $lightbox_image = $('#lightbox_image');
+    $lightbox.append('<img src="' + $el.attr('src') + '" id="lightboxImage">');
+    $lightboxImage = $('#lightboxImage');
 
     // Base styles for the lightbox.
     $lightbox.css({
@@ -337,7 +337,7 @@ var lightbox_image = function(element) {
     });
 
     // Transition with debounce.
-    fade = _.debounce(fade_lightbox_in, 1);
+    fade = _.debounce(fadeLightboxIn, 1);
     fade();
 
     // Grab Wes's properly sized width.
@@ -376,7 +376,7 @@ var lightbox_image = function(element) {
     var lightbox_left = ($w.width() - lightbox_width) / 2;
 
     // Set styles on the lightbox image.
-    $lightbox_image.css({
+    $lightboxImage.css({
         'width': lightbox_width + 'px',
         'height': lightbox_height + 'px',
         'opacity': 1,
@@ -391,10 +391,10 @@ var lightbox_image = function(element) {
     });
 
     // On click, remove the lightbox.
-    $lightbox.on('click', on_remove_lightbox);
+    $lightbox.on('click', onRemoveLightbox);
 };
 
-var on_remove_lightbox = function() {
+var onRemoveLightbox = function() {
     /*
     * Handles the click event.
     */
@@ -413,11 +413,11 @@ var on_remove_lightbox = function() {
     });
 
     // Debounce the fade.
-    fade = _.debounce(fade_lightbox_out, 250);
+    fade = _.debounce(fadeLightboxOut, 250);
     fade();
 };
 
-var fade_lightbox_in = function() {
+var fadeLightboxIn = function() {
     /*
     * Fade in event.
     */
@@ -426,14 +426,14 @@ var fade_lightbox_in = function() {
     });
 };
 
-var fade_lightbox_out = function() {
+var fadeLightboxOut = function() {
     /*
     * Fade out event.
     */
     $lightbox.remove();
 };
 
-var set_up_audio = function(selector, part) {
+var setUpAudio = function(selector, part) {
     selector.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
@@ -442,7 +442,7 @@ var set_up_audio = function(selector, part) {
             }).jPlayer('pause');
         },
         cssSelectorAncestor: '#jp_container_' + part,
-        timeupdate: on_story_timeupdate,
+        timeupdate: onStoryTimeUpdate,
         swfPath: 'js/lib',
         supplied: 'mp3, oga',
         loop: false
@@ -450,7 +450,7 @@ var set_up_audio = function(selector, part) {
 };
 
 //filmstrip
-function setup_css_animations() {
+function setupCssAnimations() {
     var prefixes = [ '-webkit-', '-moz-', '-o-', '' ];
     var keyframes = '';
     var filmstrip_steps = 14;
@@ -462,18 +462,17 @@ function setup_css_animations() {
         }
         keyframes += '@' + prefixes[i] + 'keyframes filmstrip {' + filmstrip + '}';
     }
-    
+
     var s = document.createElement('style');
     s.innerHTML = keyframes;
     $('head').append(s);
 }
 
-var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
-var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
-var filmstrip_scrum_aspect_width = 800;
-var filmstrip_scrum_aspect_height = 450;
-
-function size_filmstrip() {
+var sizeFilmstrip = function() {
+    var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
+    var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
+    var filmstrip_scrum_aspect_width = 800;
+    var filmstrip_scrum_aspect_height = 450;
     var filmstrip_scrum_width = $filmstrip_scrum_wrapper.width();
     var filmstrip_scrum_height = Math.ceil((filmstrip_scrum_width * filmstrip_scrum_aspect_height) / filmstrip_scrum_aspect_width);
     $filmstrip_scrum.width(filmstrip_scrum_width + 'px').height(filmstrip_scrum_height + 'px');
@@ -498,15 +497,15 @@ $(document).ready(function() {
     $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
-    
+
     $('.horseroll').scrollMotion({
-    	top : 0,
-    	bottom : 900	
+        top : 0,
+        bottom : 900
     });
-    
+
     $('.coat').scrollMotion({
-    	top : 1000,
-    	bottom : 2000	
+        top : 1000,
+        bottom : 2000
     });
 
     //share popover
@@ -523,39 +522,39 @@ $(document).ready(function() {
         'html': 'true'
       });
 
-    set_up_audio($story_player, 1);
-    set_up_audio($story_player_2, 2);
+    setUpAudio($story_player, 1);
+    setUpAudio($story_player_2, 2);
 
 
-    $button_toggle_caption.on('click', button_toggle_caption_click);
+    $button_toggle_caption.on('click', buttonToggleCaptionClick);
 
-    $begin.on('click', on_begin_click);
+    $begin.on('click', onBeginClick);
 
-    $nav.on('click', on_nav_click);
+    $nav.on('click', onNavClick);
 
-    $enlarge.on('click', on_lightbox_click);
+    $enlarge.on('click', onLightboxClick);
 
-    $button_download_audio.on('click', on_button_download_audio_click);
+    $button_download_audio.on('click', onButtonDownloadAudioClick);
 
-    $story_player_button.on('click', {player: $story_player}, on_story_player_button_click);
-    $story_player_button_2.on('click', {player: $story_player_2}, on_story_player_button_click);
+    $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
+    $story_player_button_2.on('click', {player: $story_player_2}, onStoryPlayerButtonClick);
 
-    $w.on('scroll', on_window_scroll);
+    $w.on('scroll', onWindowScroll);
 
-    $w.on('resize', on_window_resize);
+    $w.on('resize', onWindowResize);
 
-    $intro_advance.on('click', on_intro_advance_click);
+    $intro_advance.on('click', onIntroAdvanceClick);
 
-    on_window_resize();
+    onWindowResize();
 
-    sub_responsive_images();
+    subResponsiveImages();
 
-    fix_image_grid_spacing();
+    fixImageGridSpacing();
 
-    setup_css_animations();
+    setupCssAnimations();
 
     $waypoints.waypoint(function(direction){
-        on_waypoint(this, direction);
+        onWaypointReached(this, direction);
     }, { offset: $w.height() / 2 });
 });
 
