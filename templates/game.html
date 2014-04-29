@@ -2,20 +2,10 @@
 
     <div class="row">
         <div class="col-md-7">
-            <p>Rules of play vary, even within Afghanistan. Here's the gist of the game we saw:</p>
-            
-            <ol>
-                <li>An animal carcass is dropped into the starting circle.</li>
-                <li>A scrum of horses forms around the carcass as players fight to grab it.</li>
-                <li>Grab the carcass and carry it around the marker on the opposite end of the field.</li>
-                <li>Drop it in the scoring circle.</li>
-            </ol>
-    
+            {{ row.text }}
         </div>
         <div class="col-md-5">
-                <div class="enlarge">
-                     <img src="assets/img/transparent_1500.png" data-src="assets/img/game.gif" alt="" class="img-responsive">
-                </div><!--/enlarge-->
+                <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo }}" alt="{{ row.photo_caption }}" class="img-responsive">
         </div>
     </div>
     
