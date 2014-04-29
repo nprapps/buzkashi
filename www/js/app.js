@@ -592,8 +592,4 @@ $(document).ready(function() {
 });
 
 // Defer pointer events on animated header
-$w.load(function (){
-  $('header').css({
-    'pointer-events': 'auto'
-  });
-});
+$w.load(function (){ $('header').css({ 'pointer-events': 'auto' }); });
