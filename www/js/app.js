@@ -337,10 +337,20 @@ var lightboxImage = function(element) {
         'z-index': 500,
     });
 
-    // Transition with debounce.
-    fade = _.debounce(fadeLightboxIn, 1);
-    fade();
+    $('body').css({ overflow: 'hidden' });
+    fadeLightboxIn();
 
+    // Transition with debounce.
+
+    // fade = _.debounce(fadeLightboxIn, 100);
+    // fade();
+
+    // Never looks good to have scroll bars appear, adding
+    // several pixels of padding to the body. Make this match
+    // the fade in above.
+    // _.delay(function(){
+    //     $('body').css({ overflow: 'hidden' });
+    // }, 250);
     // Grab Wes's properly sized width.
     var lightbox_width = w;
 
@@ -408,14 +418,19 @@ var onRemoveLightbox = function() {
         opacity: 0,
     });
 
-    // Un-disable scrolling.
-    $('body').css({
-        overflow: 'auto'
-    });
+    fadeLightboxOut();
+    $('body').css({ overflow: 'auto' });
 
     // Debounce the fade.
-    fade = _.debounce(fadeLightboxOut, 250);
-    fade();
+    // fade = _.debounce(fadeLightboxOut, 100);
+    // fade();
+
+    // Never looks good to have scroll bars appear, adding
+    // several pixels of padding to the body. Make this match
+    // the fade out above.
+    // _.delay(function(){
+    //     $('body').css({ overflow: 'auto' });
+    // }, 100);
 };
 
 var fadeLightboxIn = function() {
