@@ -110,7 +110,7 @@ var onWindowResize = function() {
     //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
 
-    sizeFilmstrip();
+    resizeFilmstrip();
 
 
 
@@ -271,6 +271,7 @@ var onIntroAdvanceClick = function() {
     /*
     * Click handler on intro advance.
     */
+
     $.smoothScroll({ speed: 800, scrollTarget: '#intro-copy' });
 };
 
@@ -449,8 +450,10 @@ var setUpAudio = function(selector, part) {
     });
 };
 
-//filmstrip
-function setupCssAnimations() {
+var setupFilmstrip = function() {
+    /*
+    * Creates the CSS rules to animate the filmstrip.
+    */
     var prefixes = [ '-webkit-', '-moz-', '-o-', '' ];
     var keyframes = '';
     var filmstrip_steps = 14;
@@ -462,13 +465,12 @@ function setupCssAnimations() {
         }
         keyframes += '@' + prefixes[i] + 'keyframes filmstrip {' + filmstrip + '}';
     }
-
     var s = document.createElement('style');
     s.innerHTML = keyframes;
-    $('head').append(s);
+    document.getElementsByTagName('head')[0].appendChild(s);
 }
 
-var sizeFilmstrip = function() {
+var resizeFilmstrip = function() {
     var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
     var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
     var filmstrip_scrum_aspect_width = 800;
@@ -497,21 +499,6 @@ $(document).ready(function() {
     $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
-
-    $('.horseroll').scrollMotion({
-        top : 0,
-        bottom : 200
-    });
-
-    $('.horseroll2').scrollMotion({
-        top : 200,
-        bottom : 900
-    });
-
-    $('.coat').scrollMotion({
-        top : 1000,
-        bottom : 2000
-    });
 
     //share popover
     $(function () {
@@ -556,11 +543,37 @@ $(document).ready(function() {
 
     fixImageGridSpacing();
 
-    setupCssAnimations();
+    setupFilmstrip();
 
     $waypoints.waypoint(function(direction){
         onWaypointReached(this, direction);
     }, { offset: $w.height() / 2 });
+
+    // CineScroll!
+    _.each(['.horseroll2', '.horseroll'], function(el) {
+        var $el = $(el);
+
+        // For most animations, begin when the first pixel of
+        // the container becomes visible and continue the
+        // animation until we reach 10px from the top offset.
+        var topOffset = $el.offset().top - $(window).height();
+        var bottomOffset = $el.offset().top - 10;
+
+        // For those instances near/at the top of the document,
+        // these calculations won't work. Instead, we need to
+        // set the top offset to 0 and finish the animations
+        // over the whole window height -- with 10px to spare.
+        if (topOffset < 0) {
+            topOffset = 0;
+            bottomOffset = $(window).height() - 10;
+        }
+
+        $el.scrollMotion({
+            top: topOffset,
+            bottom: bottomOffset
+        });
+    });
+
 });
 
 // Defer pointer events on animated header

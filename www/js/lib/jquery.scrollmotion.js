@@ -12,9 +12,6 @@
         init: function(options){
             return this.each(function() {
                 var $this = $(this);
-
-                console.log($(this).offset());
-
                 var settings = $.extend({
                     top: $(window).scrollTop(),
                     bottom: $(this).position().top,
@@ -23,6 +20,8 @@
                     active: true,
                     fadeIn: false
                 }, options);
+
+                console.log(settings);
 
                 var step = (settings.bottom - settings.top) / settings.n;
 
@@ -105,11 +104,11 @@
         setFrame: function(args) {
             var current = args.current;
             var obj = args.obj;
-            if(current!==null){
-                obj.children().each(function(){
-                    if(current==$(this).index()){
+            if (current!==null) {
+                obj.children().each(function() {
+                    if (current==$(this).index()) {
                         $(this).show();
-                    }else{
+                    } else {
                         $(this).hide();
                     }
                 });
