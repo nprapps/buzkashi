@@ -4,7 +4,7 @@ var $titlecard_wrapper;
 var $w = $(window);
 var $story_audio;
 var $story_player;
-var $story_player_2;
+//var $story_player_2;
 var $waypoints;
 var $nav;
 var $begin;
@@ -138,9 +138,9 @@ var onStoryTimeUpdate = function(e) {
     var story_end;
     if (this_player == 'pop-audio_1') {
         story_end = story_end_1;
-    } else if (this_player == 'pop-audio_2') {
+    } /*else if (this_player == 'pop-audio_2') {
         story_end = story_end_2;
-    }
+    }*/
 
     /*
     * Handles the time updates for the story player.
@@ -453,8 +453,8 @@ var setUpAudio = function(selector, part) {
     selector.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: '/grave-science/assets/audio/part-' + part + '.mp3',
-                oga: '/grave-science/assets/audio/part-' + part + '.ogg'
+                mp3: '../assets/audio/part-' + part + '.mp3',
+                oga: '../assets/audio/part-' + part + '.ogg'
             }).jPlayer('pause');
         },
         cssSelectorAncestor: '#jp_container_' + part,
@@ -501,7 +501,7 @@ $(document).ready(function() {
     $titlecard = $('.titlecard');
     $titlecard_wrapper = $('.titlecard-wrapper');
     $story_player = $('#pop-audio_1');
-    $story_player_2 = $('#pop-audio_2');
+    //$story_player_2 = $('#pop-audio_2');
     $waypoints = $('.waypoint');
     $nav = $('.nav a');
     $begin = $('.begin-bar');
@@ -509,7 +509,7 @@ $(document).ready(function() {
     $button_toggle_caption = $('.caption-label');
     $overlay = $('#fluidbox-overlay');
     $story_player_button = $('#jp_container_1 .jp-play');
-    $story_player_button_2 = $('#jp_container_2 .jp-play');
+    //$story_player_button_2 = $('#jp_container_2 .jp-play');
     $enlarge = $('.enlarge');
     $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
@@ -529,8 +529,8 @@ $(document).ready(function() {
         'html': 'true'
       });
 
-    setUpAudio($story_player, 1);
-    setUpAudio($story_player_2, 2);
+    //setUpAudio($story_player, 1);
+    //setUpAudio($story_player_2, 2);
 
 
     $button_toggle_caption.on('click', buttonToggleCaptionClick);
@@ -544,7 +544,7 @@ $(document).ready(function() {
     $button_download_audio.on('click', onButtonDownloadAudioClick);
 
     $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
-    $story_player_button_2.on('click', {player: $story_player_2}, onStoryPlayerButtonClick);
+    //$story_player_button_2.on('click', {player: $story_player_2}, onStoryPlayerButtonClick);
 
     $w.on('scroll', onWindowScroll);
 
