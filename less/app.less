@@ -440,7 +440,7 @@ a:hover, a:active {
 .controls {
     position: fixed;
     top: 20px;
-    right: 30px;
+    right: 5px;
     z-index: 99;
 
     .touch & {
@@ -459,86 +459,49 @@ a:hover, a:active {
         padding: 0;
     }
 
-    .section-nav {
-        margin: 0 0 15px 15px;
-
+    .social-nav {
+    
         .touch & {
-            display: none;
+            //display: none;
         }
 
         li {
             font-size: 15px;
             line-height: 1.5;
             position: relative;
+            margin-bottom: 5px;
+            
+                .social-nav-item {
+                    background-color: #7598c9;
+                    color: #fff;
+                    padding: 15px 10px;
+                    cursor: pointer;
+                    font-size: 11px;
+                    line-height: 1;
+                    font-family: helvetica, arial, sans-serif;
+                    font-weight: bold;
+                    
+                    &:hover {
+                        background-color: #bccae5;
+                    }
+                    
+                    strong {
+                        padding-left: 2px;
+                    }
+
+                }
 
             a {
-                color: #ccc;
                 outline: 0;
                 padding: 0;
                 background: transparent;
-                .transition(color 1s ease);
-                &:hover {
-                    color: #707070;
-                }
-            }
-
-            &.comments {
-                a {
-                    background: #ccc;
-                    min-width: 20px;
-                    margin-top: 5px;
-
-                    &:after {
-                        border-color: transparent #ccc transparent transparent;
-                    }
-
-                    &:hover {
-                        background: @brand-primary;
-                        color: #fff;
-
-                        &:after {
-                            border-color: transparent @brand-primary transparent transparent;
-                        }
-                    }
-                }
-            }
-
-            &.active{
-
-                a {
-                    color: #707070;
-                }
-            }
-            strong {
-                position: absolute;
-                top: -2px;
-                left: -215px;
-                width: 210px;
-                overflow: hidden;
-                font-size: 11px;
-                padding: 5px;
-                color: #d0d0d0;
-                text-align: right;
-                text-transform: uppercase;
-                .opacity(0);
-                .transition(opacity 1s ease);
-            }
-            &:hover {
-                strong {
-                    .opacity(1);
-                }
+                
             }
         }
 
         .share {
-            margin-top: 5px;
-            color: #ccc;
-            cursor: pointer;
-            .transition(color 1s ease);
-
-            &:hover {
-                color: #707070;
-            }
+       
+            
         }
     }
 }
