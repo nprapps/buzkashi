@@ -571,7 +571,7 @@ $(document).ready(function() {
         // For most animations, begin when the first pixel of
         // the container becomes visible and continue the
         // animation until we reach 10px from the top offset.
-        var topOffset = $el.offset().top - $(window).height();
+        var topOffset = $el.offset().top - $w.height();
         var bottomOffset = $el.offset().top - 10;
 
         // For those instances near/at the top of the document,
@@ -580,7 +580,7 @@ $(document).ready(function() {
         // over the whole window height -- with 10px to spare.
         if (topOffset < 0) {
             topOffset = 0;
-            bottomOffset = $(window).height() - 10;
+            bottomOffset = $w.height() - 10;
         }
 
         $el.scrollMotion({
