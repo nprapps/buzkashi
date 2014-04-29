@@ -453,8 +453,8 @@ var setUpAudio = function(selector, part) {
     selector.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: '../assets/audio/part-' + part + '.mp3',
-                oga: '../assets/audio/part-' + part + '.ogg'
+                mp3: 'buzkashi/assets/audio/part-' + part + '.mp3',
+                oga: 'buzkashi/assets/audio/part-' + part + '.ogg'
             }).jPlayer('pause');
         },
         cssSelectorAncestor: '#jp_container_' + part,
@@ -529,7 +529,7 @@ $(document).ready(function() {
         'html': 'true'
       });
 
-    //setUpAudio($story_player, 1);
+    setUpAudio($story_player, 1);
     //setUpAudio($story_player_2, 2);
 
 
@@ -565,7 +565,7 @@ $(document).ready(function() {
     }, { offset: $w.height() / 2 });
 
     // CineScroll!
-    _.each(['.scrum', '.megaphone', '.practice', '.dirt', '.match1', '.match2'], function(el) {
+    _.each(['.scrum', '.megaphone', '.practice', '.dirt', '.match1', '.match2',], function(el) {
         var $el = $(el);
 
         // For most animations, begin when the first pixel of
