@@ -362,11 +362,7 @@ a:hover, a:active {
         height: 100%;
         background: url('@{img-root}/gallop.jpg') no-repeat 50% 50%;
         .background-size(cover);
-        .opacity(.7);
-
-        @media @screen-medium-above {
-            .opacity(.7);
-        }
+        .opacity(1);
 
         .touch & {
             background: url('@{img-root}/gallop.jpg') no-repeat 50% 50%;
@@ -416,7 +412,7 @@ a:hover, a:active {
 //section navigation
 .controls {
     position: fixed;
-    top: 20px;
+    top: 30px;
     right: 5px;
     z-index: 99;
 
@@ -425,7 +421,7 @@ a:hover, a:active {
         right: 5px;
         z-index: 1001;
         @media @screen-small-above {
-            top: 20px;
+            top: 50px;
             right: 10px;
         }
     }
@@ -442,6 +438,9 @@ a:hover, a:active {
             line-height: 1.5;
             position: relative;
             margin-bottom: 2px;
+            .touch & {
+               margin-bottom: 8px;
+            }
             
                 .social-nav-item {
                     background-color: #7598c9;
@@ -486,6 +485,10 @@ a:hover, a:active {
         color: #7598c9;
         &:hover {
             color: #bccae5;
+        }
+        .touch & {
+            font-size: 24px;
+            margin: 20px 5px;
         }
     }
 }
@@ -685,7 +688,7 @@ a:hover, a:active {
     }
     
     //full bleed images
-    .image-sequence {
+    /*.image-sequence {
         position: relative;
         @media @screen-small-above {
             margin: 60px 0 30px 0;
@@ -694,7 +697,7 @@ a:hover, a:active {
             background:url('../assets/img/titlecard.jpg') top right no-repeat; background-position:fixed;
             background-size: cover;
         }
-    }
+    }*/
 
     //full bleed images
     .edge-to-edge {
