@@ -173,20 +173,6 @@ a:hover, a:active {
     100% {opacity: 0;}
 }
 
-.horseroll {
-	width:100%;
-	margin: 0 auto;
-	height:auto;
-	overflow:hidden;
-	//border-top: 50px solid #fff;
-}
-
-.horseroll img, .horseroll2 img {
-    width: 100%;
-    display: block;
-    height: auto;
-}
-
 //scrollmations (.scrum, .horseroll, .megaphone, .practice
 .scrollmation img {
     width: 100%;
@@ -254,15 +240,6 @@ a:hover, a:active {
             margin: 10px 0;
             @media @screen-small-above {
                 width: 100px;
-            }
-        }
-
-        .propublica-logo {
-            width: auto;
-            height: 45px;
-            margin: -4px 0 10px 22px;
-            @media @screen-small-above {
-                height: 60px;
             }
         }
 
@@ -534,8 +511,12 @@ a:hover, a:active {
     .game {
     
         h3 {
+            font-size: 24px;
             margin: 0 0 20px 0;
-            font-size: 36px;
+             @media @screen-small-above {
+                font-size: 36px;
+            }
+            
         }
     
         p {
@@ -548,6 +529,10 @@ a:hover, a:active {
         
         li {
             margin-bottom: 10px;
+            font-size: 13px;
+            @media @screen-small-above {
+                font-size: 17px;
+            }
         }
         
     } 
@@ -715,6 +700,7 @@ a:hover, a:active {
     //full bleed images
     .edge-to-edge {
         position: relative;
+        margin-bottom: 30px;
         @media @screen-small-above {
             margin: 60px 0 30px 0;
         }
@@ -763,22 +749,6 @@ a:hover, a:active {
 
         .text {
             .make-md-column(8);
-        }
-    }
-
-    //chapter title animation
-    .chapter-active {
-        @media @screen-medium-above {
-            .edge-to-edge {
-                h2 {.opacity(1);}
-            }
-
-            .more-below {
-                .animation-name(fadeInUp);
-                &.animated{
-                    .animation-duration(1s);
-                }
-            }
         }
     }
 
