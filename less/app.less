@@ -58,6 +58,15 @@ a:hover, a:active {
     text-decoration: none;
 }
 
+h3 {
+    font-size: 24px;
+    margin: 0 0 20px 0;
+     @media @screen-small-above {
+        font-size: 36px;
+    }
+    
+}
+
 //animations
 .animated {
     -webkit-animation-fill-mode:both;
@@ -517,18 +526,16 @@ a:hover, a:active {
         line-height: 1.2;
     }
     
+    //gear
+    
+    .gear {
+        
+    }
+    
     //game
 
     .game {
-    
-        h3 {
-            font-size: 24px;
-            margin: 0 0 20px 0;
-             @media @screen-small-above {
-                font-size: 36px;
-            }
-            
-        }
+        margin-top: 60px;
     
         p {
             margin: 0;
@@ -977,7 +984,7 @@ a:hover, a:active {
 
             i {
                 font-size: 26px;
-                color: #fff;
+                color: #ccc;
                 .opacity(.4);
             }
 
