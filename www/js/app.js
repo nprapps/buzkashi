@@ -35,6 +35,7 @@ var graphic_height = 175;
 var story_start = 0;
 var story_end_1 = 673;
 var story_end_2 = 771;
+var waypointOffset;
 
 var unveilImages = function() {
     /*
@@ -104,22 +105,24 @@ var onWindowResize = function() {
         h = w_height;
     }
 
+    // Dynamically size and style the titlecard.
     $titlecard.width(w + 'px').height(h + 'px');
     $titlecard.css('left', ((w_width - w) / 2) + 'px');
     $titlecard.css('top', ((w_height - h) / 2) + 'px');
     $titlecard_wrapper.height(w_height + 'px');
-    //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
 
-    resizeFilmstrip();
-
-
-
-    // set the image grid spacing properly
+    // Set the image grid spacing properly
+    // and re-initialize the waypoints.
     fixImageGridSpacing();
+    setupWaypoints();
 };
 
 var fixImageGridSpacing = function() {
+    /*
+    * Adjusts the image grid for the side-by-side templates.
+    * Handles some edge cases where on small screens we need fewer margins.
+    */
     _.each($side_by_sides, function(side_by_side) {
         if ($w.width() < 992) {
             if ($(side_by_side).next().hasClass('side-by-side-wrapper')) {
@@ -135,17 +138,14 @@ var fixImageGridSpacing = function() {
 };
 
 var onStoryTimeUpdate = function(e) {
-    var this_player = e.currentTarget.id;
-    var story_end;
-    if (this_player == 'pop-audio_1') {
-        story_end = story_end_1;
-    } /*else if (this_player == 'pop-audio_2') {
-        story_end = story_end_2;
-    }*/
-
     /*
     * Handles the time updates for the story player.
+    * In particular, writes the time elapsed/remaining to the player div.
     */
+
+    // Set up the time for when this story ends.
+    var this_player = e.currentTarget.id;
+    var story_end = story_end_1;
 
     // If we reach the end, stop playing AND send a Google event.
     if (e.jPlayer.status.currentTime > parseInt(story_end, 0)) {
@@ -172,9 +172,7 @@ var onBeginClick = function() {
     */
 
     // If this is a mobile device, start up the waterworks.
-    if (Modernizr.touch) {
-        $( "#content" ).addClass( "touch-begin" );
-    }
+    if (Modernizr.touch) { $( "#content" ).addClass( "touch-begin" ); }
 
     // Smooth scroll us to the intro.
     $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
@@ -188,6 +186,8 @@ var buttonToggleCaptionClick = function() {
     * Click handler for the caption toggle.
     */
     _gaq.push(['_trackEvent', 'Captions', 'Clicked caption button', APP_CONFIG.PROJECT_NAME, 1]);
+
+    // Toggle the captions!
     $( this ).parent( ".captioned" ).toggleClass('cap-on');
 };
 
@@ -200,25 +200,17 @@ var onNavClick = function(){
 
     // If the chapter has an edge_to_edge, offset the smoothScroll
 
+    // Check for edge-to-edge existence.
     var edge_to_edge = $('#' + hash).children('.edge-to-edge');
-    var has_edge_to_edge;
 
-    if (edge_to_edge.length > 0) {
-        has_edge_to_edge = true;
-    }
-    else {
-        has_edge_to_edge = false;
-    }
+    // Set up the base smooth scroll options.
+    var scrollOptions = { speed: 800, scrollTarget: '#' + hash }
 
-    var edge_to_edge_margin = parseInt($(edge_to_edge).css('margin-top'));
-    console.log(edge_to_edge_margin);
+    // If there's edge-to-edge, set a new smooth scroll option.
+    if (edge_to_edge.length > 0) { scrollOptions['offset'] = parseInt($(edge_to_edge).css('margin-top')); }
 
-    if (has_edge_to_edge == true) {
-        $.smoothScroll({ offset: edge_to_edge_margin, speed: 800, scrollTarget: '#' + hash });
-    }
-    else {
-        $.smoothScroll({ speed: 800, scrollTarget: '#' + hash });
-    }
+    // SmoothScroll to the correct thing now.
+    $.smoothScroll(scrollOptions);
 
     return false;
 };
@@ -226,10 +218,9 @@ var onNavClick = function(){
 var onLightboxClick = function() {
     /*
     * Click handler for lightboxed photos.
+    * Nothing for touch devices.
     */
-    if (!Modernizr.touch) {
-        lightboxImage($(this).find('img'));
-    }
+    if (!Modernizr.touch) { lightboxImage($(this).find('img')); }
 };
 
 var onButtonDownloadAudioClick = function(){
@@ -243,6 +234,7 @@ var onStoryPlayerButtonClick = function(e){
     /*
     * Click handler for the story player "play" button.
     */
+    console.log(e);
     _gaq.push(['_trackEvent', 'Audio', 'Played audio story', APP_CONFIG.PROJECT_NAME, 1]);
     e.data.player.jPlayer("pauseOthers");
     e.data.player.jPlayer('play');
@@ -284,9 +276,7 @@ var onWaypointReached = function(element, direction) {
     // Get the waypoint name.
     var waypoint = $(element).attr('id');
 
-    console.log(element);
-
-    // Just hard code this because of reasons.
+    // Handle the down direction.
     if (direction == "down") {
         if ($(element).hasClass('chapter')) {
             $('ul.nav li').removeClass('active');
@@ -294,6 +284,7 @@ var onWaypointReached = function(element, direction) {
         }
     }
 
+    // Handle the up direction.
     if (direction == "up") {
         var $previous_element = $(element).prev();
         if ($previous_element.hasClass('chapter')) {
@@ -307,12 +298,8 @@ var onWaypointReached = function(element, direction) {
         $(element).addClass('chapter-active');
     }
 
-    /*
-    * It would be nice if we could just instantiate
-    * the scrollmotion logic right here rather than elsewhere.
-    * Actual solution involved display:none on the animation frames
-    * that were supposed to be invisible.
-    */
+    // If this is one of those fancy scroll animations,
+    // initialize the scroll motion when we trigger the waypoint.
     if ($(element).hasClass('animation')) {
         var $el = $(element);
 
@@ -361,21 +348,11 @@ var lightboxImage = function(element) {
         'z-index': 500,
     });
 
+    // Prep the lightbox overlay.
     $('body').css({ overflow: 'hidden' });
-    fadeLightboxIn();
+    $lightbox.css({ opacity: 1 });
 
-    // Transition with debounce.
-
-    // fade = _.debounce(fadeLightboxIn, 100);
-    // fade();
-
-    // Never looks good to have scroll bars appear, adding
-    // several pixels of padding to the body. Make this match
-    // the fade in above.
-    // _.delay(function(){
-    //     $('body').css({ overflow: 'hidden' });
-    // }, 250);
-    // Grab Wes's properly sized width.
+    // Handle the lightbox size depending on window/image orientation.
     var lightbox_width = w;
 
     // Sometimes, this is wider than the window, which is bad.
@@ -421,11 +398,8 @@ var lightboxImage = function(element) {
     });
 
     // Disable scrolling while the lightbox is present.
-    $('body').css({
-        overflow: 'hidden'
-    });
-
     // On click, remove the lightbox.
+    $('body').css({ overflow: 'hidden' });
     $lightbox.on('click', onRemoveLightbox);
 };
 
@@ -438,50 +412,27 @@ var onRemoveLightbox = function() {
     $el = $('#lightbox');
 
     // Fade to black.
-    $el.css({
-        opacity: 0,
-    });
-
-    fadeLightboxOut();
-    $('body').css({ overflow: 'auto' });
-
-    // Debounce the fade.
-    // fade = _.debounce(fadeLightboxOut, 100);
-    // fade();
-
-    // Never looks good to have scroll bars appear, adding
-    // several pixels of padding to the body. Make this match
-    // the fade out above.
-    // _.delay(function(){
-    //     $('body').css({ overflow: 'auto' });
-    // }, 100);
-};
-
-var fadeLightboxIn = function() {
-    /*
-    * Fade in event.
-    */
-    $lightbox.css({
-        opacity: 1
-    });
-};
-
-var fadeLightboxOut = function() {
-    /*
-    * Fade out event.
-    */
+    $el.css({ opacity: 0 });
     $lightbox.remove();
+    $('body').css({ overflow: 'auto' });
 };
 
-var setUpAudio = function(selector, part) {
+var setUpAudio = function(selector) {
+    /*
+    * Sets up the story audio player.
+    */
+    var urlBase = APP_CONFIG.S3_BASE_URL;
+    if (urlBase == 'http://127.0.0.1:8000') {
+        urlBase = 'http://stage-apps.npr.org'
+    }
     selector.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: 'buzkashi/assets/audio/part-' + part + '.mp3',
-                oga: 'buzkashi/assets/audio/part-' + part + '.ogg'
+                mp3: urlBase + '/buzkashi/assets/audio/part-1.mp3',
+                oga: urlBase + '/buzkashi/assets/audio/part-1.ogg'
             }).jPlayer('pause');
         },
-        cssSelectorAncestor: '#jp_container_' + part,
+        cssSelectorAncestor: '#jp_container_1',
         timeupdate: onStoryTimeUpdate,
         swfPath: 'js/lib',
         supplied: 'mp3, oga',
@@ -489,43 +440,34 @@ var setUpAudio = function(selector, part) {
     });
 };
 
-var setupFilmstrip = function() {
+var setupSharePopover = function() {
     /*
-    * Creates the CSS rules to animate the filmstrip.
+    * Bootstrap sharing popover. Everyone likes to share.
     */
-    var prefixes = [ '-webkit-', '-moz-', '-o-', '' ];
-    var keyframes = '';
-    var filmstrip_steps = 14;
-    for (var i = 0; i < prefixes.length; i++) {
-        var filmstrip = '';
-        for (var f = 0; f < filmstrip_steps; f++) {
-            var current_pct = f * (100/filmstrip_steps);
-            filmstrip += current_pct + '% {background-position:0 -' + (f * 100) + '%;' + prefixes[i] + 'animation-timing-function:steps(1);}';
-        }
-        keyframes += '@' + prefixes[i] + 'keyframes filmstrip {' + filmstrip + '}';
-    }
-    var s = document.createElement('style');
-    s.innerHTML = keyframes;
-    document.getElementsByTagName('head')[0].appendChild(s);
+    $(function () { $('body').popover({ selector: '[data-toggle="popover"]' }); });
+
+    $('.share').popover({
+        'selector': '',
+        'placement': 'left',
+        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
+        'html': 'true'
+    });
 }
 
-var resizeFilmstrip = function() {
-    var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
-    var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
-    var filmstrip_scrum_aspect_width = 800;
-    var filmstrip_scrum_aspect_height = 450;
-    var filmstrip_scrum_width = $filmstrip_scrum_wrapper.width();
-    var filmstrip_scrum_height = Math.ceil((filmstrip_scrum_width * filmstrip_scrum_aspect_height) / filmstrip_scrum_aspect_width);
-    $filmstrip_scrum.width(filmstrip_scrum_width + 'px').height(filmstrip_scrum_height + 'px');
+var setupWaypoints = function() {
+    /*
+    * Sets up the global waypoints machinery.
+    */
+    $waypoints.waypoint(function(direction){
+        onWaypointReached(this, direction);
+    }, { offset: waypointOffset });
 }
-
 
 $(document).ready(function() {
     $container = $('#content');
     $titlecard = $('.titlecard');
     $titlecard_wrapper = $('.titlecard-wrapper');
     $story_player = $('#pop-audio_1');
-    //$story_player_2 = $('#pop-audio_2');
     $waypoints = $('.waypoint');
     $nav = $('.nav a');
     $begin = $('.begin-bar');
@@ -533,65 +475,34 @@ $(document).ready(function() {
     $button_toggle_caption = $('.caption-label');
     $overlay = $('#fluidbox-overlay');
     $story_player_button = $('#jp_container_1 .jp-play');
-    //$story_player_button_2 = $('#jp_container_2 .jp-play');
     $enlarge = $('.enlarge');
     $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
+    waypointOffset = $w.height() / 2;
 
-    //share popover
-    $(function () {
-        $('body').popover({
-            selector: '[data-toggle="popover"]'
-        });
-    });
-
-    $('.share').popover({
-        'selector': '',
-        'placement': 'left',
-        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
-        'html': 'true'
-      });
-
-    setUpAudio($story_player, 1);
-    //setUpAudio($story_player_2, 2);
-
-
-    $button_toggle_caption.on('click', buttonToggleCaptionClick);
-
-    $begin.on('click', onBeginClick);
-
-    $nav.on('click', onNavClick);
-
-    $enlarge.on('click', onLightboxClick);
-
-    $button_download_audio.on('click', onButtonDownloadAudioClick);
-
-    $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
-    //$story_player_button_2.on('click', {player: $story_player_2}, onStoryPlayerButtonClick);
-
+    // Global window events.
     $w.on('scroll', onWindowScroll);
-
     $w.on('resize', onWindowResize);
 
+    // Click events.
+    $begin.on('click', onBeginClick);
+    $button_download_audio.on('click', onButtonDownloadAudioClick);
+    $button_toggle_caption.on('click', buttonToggleCaptionClick);
+    $enlarge.on('click', onLightboxClick);
     $intro_advance.on('click', onIntroAdvanceClick);
+    $nav.on('click', onNavClick);
+    $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
 
+    // Events that need to be initialized.
+    setUpAudio($story_player);
+    setupSharePopover();
     onWindowResize();
-
-    subResponsiveImages();
-
     fixImageGridSpacing();
-
-    setupFilmstrip();
-
-    $waypoints.waypoint(function(direction){
-        onWaypointReached(this, direction);
-    }, { offset: $w.height() / 2 });
-});
-
-// Defer pointer events on animated header
-$(window).load(function (){
-
-    $('header').css({ 'pointer-events': 'auto' });
+    subResponsiveImages();
+    setupWaypoints();
 
 });
+
+// For some reason, this needs to be done on load.
+$(window).load(function (){ $('header').css({ 'pointer-events': 'auto' }); });
