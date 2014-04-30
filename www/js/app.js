@@ -298,21 +298,8 @@ var onWaypointReached = function(element, direction) {
         $(element).addClass('chapter-active');
     }
 
-<<<<<<< HEAD
     // If this is one of those fancy scroll animations,
     // initialize the scroll motion when we trigger the waypoint.
-=======
-    /*
-    * It would be nice if we could just instantiate
-    * the scrollmotion logic right here rather than elsewhere.
-    * Actual solution involved display:none on the animation frames
-    * that were supposed to be invisible.
-    
-    var topOffset = $el.offset().top - ($w.height() * 0.5);
-    var bottomOffset = $el.offset().top + ($w.height() * 0.33);
-    
-    */
->>>>>>> 25238cf05c4bbbab9015b1fe8bbc366dbaf70bbb
     if ($(element).hasClass('animation')) {
         var $el = $(element);
 
