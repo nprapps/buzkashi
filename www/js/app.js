@@ -315,9 +315,17 @@ var onWaypointReached = function(element, direction) {
     */
     if ($(element).hasClass('animation')) {
         var $el = $(element);
+
+        var topOffset = $el.offset().top - ($w.height() * 0.5);
+        var bottomOffset = $el.offset().top + ($w.height() * 0.33);
+
+        if ($el.hasClass('match2')) {
+            topOffset = $el.offset().top - ($w.height() * 0.25);
+        }
+
         $el.scrollMotion({
-            top: $el.offset().top - ($w.height() / 2),
-            bottom: $el.offset().top + ($w.height() / 3)
+            top: topOffset,
+            bottom: bottomOffset
         });
     }
 };
