@@ -36,22 +36,7 @@
     <div class="titlecard"></div>
 </div><!-- /titlecard-wrapper -->
 
-<div class="controls">
-    <ul class="social-nav nav">
-        <li class="share">
-            <p class="social-nav-item">
-                <i class="fa fa-share"></i> <strong>Share</strong>
-            </p>
-        </li>
-        <li class="comments">
-            <a class="social-nav-item" href="comments/">
-                <span class="comment-count"></span>
-                <strong>Comments</strong>
-            </a>
-            
-        </li>
-    </ul>
-</div>
+
 <div id="content">
 
         {% for row in COPY.primary %}
@@ -130,7 +115,22 @@
 </div><!--/audio-story -->
 </div>
 <!-- /content -->
-
+<div class="controls">
+    <ul class="social-nav nav">
+        <li class="share">
+            <p class="social-nav-item">
+                <i class="fa fa-share"></i> <strong>Share</strong>
+            </p>
+        </li>
+        <li class="comments">
+            <a class="social-nav-item" href="comments/">
+                <span class="comment-count"></span>
+                <strong>Comments</strong>
+            </a>
+            
+        </li>
+    </ul>
+</div>
 {% endblock %}
 {% block extra_foot_js %}
 {% endblock %}
