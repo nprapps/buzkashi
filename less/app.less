@@ -421,9 +421,9 @@ a:hover, a:active {
     z-index: 99;
 
     .touch & {
-        top: 0;
-        right: 0;
-        bottom: auto;
+        top: 10px;
+        right: 5px;
+        z-index: 1001;
         @media @screen-small-above {
             top: 20px;
             right: 10px;
@@ -437,13 +437,8 @@ a:hover, a:active {
     }
 
     .social-nav {
-    
-        .touch & {
-            //display: none;
-        }
 
         li {
-            font-size: 15px;
             line-height: 1.5;
             position: relative;
             margin-bottom: 2px;
@@ -452,12 +447,16 @@ a:hover, a:active {
                     background-color: #7598c9;
                     color: #fff;
                     margin: 0;
-                    padding: 15px 10px;
+                    padding: 10px 5px;
                     cursor: pointer;
-                    font-size: 11px;
+                    font-size: 9px;
                     line-height: 1;
                     font-family: helvetica, arial, sans-serif;
                     font-weight: bold;
+                     @media @screen-small-above {
+                        padding: 15px 10px;
+                        font-size: 11px;
+                    }
                     
                     &:hover {
                         background-color: #bccae5;
@@ -946,7 +945,7 @@ a:hover, a:active {
             position: absolute;
             bottom: 2px;
             right: 20px;
-            z-index: 98;
+            z-index: 1000;
             margin: 0;
             padding: 0;
             line-height: 1;
