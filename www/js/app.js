@@ -307,6 +307,10 @@ var onWaypointReached = function(element, direction) {
 
         var topOffset = $el.offset().top  - ($w.height() * 0.5);
         var bottomOffset = $el.offset().top;
+        
+        if ($el.hasClass('scrum')) {
+            var bottomOffset = $el.offset().top - ($w.height() * 0.1);
+        }
 
         if ($el.hasClass('dirt')) {
             var bottomOffset = $el.offset().top + ($w.height() * 0.2);
