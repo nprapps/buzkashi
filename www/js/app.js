@@ -448,7 +448,7 @@ var setupSharePopover = function() {
 
     $('.share').popover({
         'selector': '',
-        'placement': 'left',
+        'placement': 'top',
         'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
         'html': 'true'
     });

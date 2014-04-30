@@ -208,7 +208,7 @@ a:hover, a:active {
     height: 100%;
     overflow: hidden;
     position: absolute;
-    z-index: 100;
+    z-index: 500;
     top: 0;
     left: 0;
     background-color: #000;
@@ -412,19 +412,14 @@ a:hover, a:active {
 //section navigation
 .controls {
     position: fixed;
-    top: 30px;
-    right: 5px;
-    z-index: 99;
+    bottom: 0;
+    left: 0;
+    z-index: 499;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    height: 40px;
 
-    .touch & {
-        top: 10px;
-        right: 5px;
-        z-index: 1001;
-        @media @screen-small-above {
-            top: 50px;
-            right: 10px;
-        }
-    }
 
     ul {
         list-style: none;
@@ -433,33 +428,34 @@ a:hover, a:active {
     }
 
     .social-nav {
+    
 
         li {
             line-height: 1.5;
             position: relative;
             margin-bottom: 2px;
-            .touch & {
-               margin-bottom: 8px;
-            }
+            
             
                 .social-nav-item {
-                    background-color: #7598c9;
-                    color: #fff;
+                   
+                    color: #777;
                     margin: 0;
-                    padding: 10px 5px;
                     cursor: pointer;
-                    font-size: 9px;
+                    font-size: 10px;
                     line-height: 1;
-                    font-family: helvetica, arial, sans-serif;
+                    padding: 5px;
+                 
                     font-weight: bold;
+                    
+                    &:hover {
+                        color: #444;
+                    }
+                    
                      @media @screen-small-above {
-                        padding: 15px 10px;
                         font-size: 11px;
                     }
                     
-                    &:hover {
-                        background-color: #bccae5;
-                    }
+                    
                     
                     strong {
                         padding-left: 2px;
@@ -471,20 +467,33 @@ a:hover, a:active {
                 outline: 0;
                 padding: 0;
                 background: transparent;
-                
             }
+        }
+        
+        .share {
+        position: absolute;
+        top: 10px;
+        right: 10px;         
+        }
+        
+        .comments {
+            position: absolute;
+            top: 10px;
+            right: 80px;
         }
     }
 }
+
+
 
 .popover-content {
     i {
         display: block;
         margin: 10px 0;
         cursor: pointer;
-        color: #7598c9;
+        color: #777;
         &:hover {
-            color: #bccae5;
+            color: #555;
         }
         .touch & {
             font-size: 24px;
@@ -918,7 +927,7 @@ a:hover, a:active {
             position: absolute;
             bottom: 0px;
             left: 0;
-            z-index: 500;
+            z-index: 498;
             .transition(opacity 1s ease);
             opacity: 0;
 
@@ -1627,7 +1636,7 @@ footer {
 
 /* lightbox */
 #lightbox {
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 1);
     cursor: pointer;
     display: none;
     opacity: 0;
