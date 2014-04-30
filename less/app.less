@@ -1527,45 +1527,26 @@ a:hover, a:active {
     //map
     
     .map-fade {
-    max-width: 47%;
+    max-width: 70%;
     position: absolute;
-    top: 0;
-    left: 25%;
+    top: -40px;
+    left: 10%;
+        @media @screen-small-above { 
+            max-width: 60%;
+            left: 15%;
+        }
+        
+        @media @screen-medium-above { 
+            max-width: 50%;
+            top: 0;
+            left: 25%;
+        }
     }
     
     .map-full {
         margin-top: 10px;
     }
     
-    /*
-    .map {
-        background-color: #333;
-        padding: 50px 0;
-        
-        h2 {
-            font-size: 70px;
-            color: #eee;
-            text-align: center;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        
-        p {
-            max-width: 800px;
-            color: #ccc;
-            margin: 0 auto;
-            padding-bottom: 50px;
-            text-align: center;
-            font-size: 24px;
-        }
-        
-        img {
-            width: 65%;
-            margin-left: 20%;
-            opacity: .8;
-            margin-bottom: 50px;
-        }
-    }*/
 
 
 }// end content
