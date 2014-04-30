@@ -312,15 +312,19 @@ var onWaypointReached = function(element, direction) {
     * the scrollmotion logic right here rather than elsewhere.
     * Actual solution involved display:none on the animation frames
     * that were supposed to be invisible.
+    
+    var topOffset = $el.offset().top - ($w.height() * 0.5);
+    var bottomOffset = $el.offset().top + ($w.height() * 0.33);
+    
     */
     if ($(element).hasClass('animation')) {
         var $el = $(element);
 
-        var topOffset = $el.offset().top - ($w.height() * 0.5);
-        var bottomOffset = $el.offset().top + ($w.height() * 0.33);
+        var topOffset = $el.offset().top  - ($w.height() * 0.5);
+        var bottomOffset = $el.offset().top;
 
-        if ($el.hasClass('match2')) {
-            topOffset = $el.offset().top - ($w.height() * 0.25);
+        if ($el.hasClass('dirt')) {
+            var bottomOffset = $el.offset().top + ($w.height() * 0.2);
         }
 
         $el.scrollMotion({
