@@ -4,7 +4,6 @@ var $titlecard_wrapper;
 var $w = $(window);
 var $story_audio;
 var $story_player;
-//var $story_player_2;
 var $waypoints;
 var $nav;
 var $begin;
@@ -68,13 +67,16 @@ var subResponsiveImages = function() {
         // Loop over our images ...
         _.each($container.find('img'), function(img){
 
-            // If the image has a data-src attribute ...
-            if ($(img).attr('data-src')){
-
+            if ($(img).attr('data-src')) {
                 // Sub in the responsive image from that data-src attribute.
-                var responsive_image = $(img).attr('data-src').replace('_1500', '_750');
+                var responsive_image = $(img).attr('data-src').replace('.', '-16x9-m.');
                 $(img).attr('data-src', responsive_image);
             }
+        });
+
+        _.each($container.find('.animation').find('img'), function(img){
+            var responsive_image = $(img).attr('src').replace('.', '-16x9-m.');
+            $(img).attr('src', responsive_image);
         });
     }
 
