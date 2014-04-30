@@ -21,8 +21,6 @@
                     fadeIn: false
                 }, options);
 
-                console.log(settings);
-
                 var step = (settings.bottom - settings.top) / settings.n;
 
                 settings.breaks = [settings.top];

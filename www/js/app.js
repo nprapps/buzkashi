@@ -36,7 +36,6 @@ var story_start = 0;
 var story_end_1 = 673;
 var story_end_2 = 771;
 
-
 var unveilImages = function() {
     /*
     * Loads images using jQuery unveil.
@@ -46,7 +45,9 @@ var unveilImages = function() {
         // If we're on a touch device, just load all the images.
         // Seems backwards, but iOS Safari and Android have terrible scroll event
         // handling that doesn't allow unveil to progressively load images.
-        $container.find('img').unveil($(document).height());
+        $container.find('img').unveil(
+            $(document).height()
+        );
     }
     else {
         // Otherwise, start loading at 3x the window height.
@@ -283,6 +284,7 @@ var onWaypointReached = function(element, direction) {
     // Get the waypoint name.
     var waypoint = $(element).attr('id');
 
+    console.log(element);
 
     // Just hard code this because of reasons.
     if (direction == "down") {
@@ -303,6 +305,20 @@ var onWaypointReached = function(element, direction) {
     // If this is a chapter waypoint, run the chapter transitions.
     if ($(element).children('.edge-to-edge')){
         $(element).addClass('chapter-active');
+    }
+
+    /*
+    * It would be nice if we could just instantiate
+    * the scrollmotion logic right here rather than elsewhere.
+    * Actual solution involved display:none on the animation frames
+    * that were supposed to be invisible.
+    */
+    if ($(element).hasClass('animation')) {
+        var $el = $(element);
+        $el.scrollMotion({
+            top: $el.offset().top - ($w.height() / 2),
+            bottom: $el.offset().top + ($w.height() / 3)
+        });
     }
 };
 var lightboxImage = function(element) {
@@ -563,33 +579,11 @@ $(document).ready(function() {
     $waypoints.waypoint(function(direction){
         onWaypointReached(this, direction);
     }, { offset: $w.height() / 2 });
-
-    // CineScroll!
-    _.each(['.scrum', '.megaphone', '.practice', '.dirt', '.match1', '.match2',], function(el) {
-        var $el = $(el);
-
-        // For most animations, begin when the first pixel of
-        // the container becomes visible and continue the
-        // animation until we reach 10px from the top offset.
-        var topOffset = $el.offset().top - $w.height();
-        var bottomOffset = $el.offset().top - 10;
-
-        // For those instances near/at the top of the document,
-        // these calculations won't work. Instead, we need to
-        // set the top offset to 0 and finish the animations
-        // over the whole window height -- with 10px to spare.
-        if (topOffset < 0) {
-            topOffset = 0;
-            bottomOffset = $w.height() - 10;
-        }
-
-        $el.scrollMotion({
-            top: topOffset,
-            bottom: bottomOffset
-        });
-    });
-
 });
 
 // Defer pointer events on animated header
-$w.load(function (){ $('header').css({ 'pointer-events': 'auto' }); });
+$(window).load(function (){
+
+    $('header').css({ 'pointer-events': 'auto' });
+
+});
