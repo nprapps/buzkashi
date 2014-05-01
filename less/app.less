@@ -520,6 +520,13 @@ a:hover, a:active {
     }
 //quick guide   
 .quick-guide {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    max-width: 1000px;
+    color: #666;
+    padding-top: 20px;
 
     h3 {
         font-size: 18px;
@@ -552,15 +559,17 @@ a:hover, a:active {
         ol {
             color: #333;
             margin-top: 20px;
-        }
-        
-        li {
-            margin-bottom: 10px;
-            font-size: 13px;
-            @media @screen-small-above {
-                font-size: 17px;
+            
+            li {
+                margin-bottom: 10px;
+                font-size: 13px;
+                @media @screen-small-above {
+                    font-size: 17px;
+                }
             }
         }
+        
+        
         
     } 
     

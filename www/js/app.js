@@ -24,7 +24,7 @@ var ambient_is_paused = true;
 var ambient_start = 2;
 var ambient_end = 33;
 var currently_playing = false;
-var volume_ambient_active = 0.8;
+var volume_ambient_active = 1;
 var volume_ambient_inactive = 0.1;
 var aspect_width = 16;
 var aspect_height = 9;
@@ -49,12 +49,12 @@ var AMBIENT_MP3;
 var AMBIENT_OGG;
 var AMBIENT_CUES = {
     'top': {
-        'up': '1,33',
-        'down': '1,33'
+        'up': '33,60',
+        'down': '33,60'
     },
     'megaphone': {
         'up': '1,33',
-        'down': '33,60'
+        'down': '1,33'
     },
     'dirt': {
         'up': '35,60',
