@@ -313,7 +313,7 @@ var onBeginClick = function() {
     $( "body" ).addClass( "ambient-begin" );
 
     // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
+    $.smoothScroll({ speed: 2300, scrollTarget: '#content' });
 
     // Unpause.
     ambient_is_paused = false;
