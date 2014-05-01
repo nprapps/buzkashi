@@ -21,10 +21,10 @@ var $ambient_player;
 var $toggle_ambient;
 var audio_supported = true;
 var ambient_is_paused = true;
-var ambient_start = 0;
+var ambient_start = 2;
 var ambient_end = 33;
 var currently_playing = false;
-var volume_ambient_active = 1;
+var volume_ambient_active = 0.8;
 var volume_ambient_inactive = 0.1;
 var aspect_width = 16;
 var aspect_height = 9;
@@ -49,11 +49,11 @@ var AMBIENT_MP3;
 var AMBIENT_OGG;
 var AMBIENT_CUES = {
     'top': {
-        'up': '0,33',
-        'down': '0,33'
+        'up': '2,33',
+        'down': '2,33'
     },
     'megaphone': {
-        'up': '0,33',
+        'up': '2,33',
         'down': '35,60'
     },
     'dirt': {
@@ -438,26 +438,28 @@ var onWaypointReached = function(element, direction) {
         $(element).addClass('chapter-active');
     }
 
-    // If this is one of those fancy scroll animations,
-    // initialize the scroll motion when we trigger the waypoint.
-    if ($(element).hasClass('animation')) {
-        var $el = $(element);
+    // No animation on mobile. Scroll events are evil.
+    if (!Modernizr.touch) {
 
-        var topOffset = $el.offset().top  - ($w.height() * 0.5);
-        var bottomOffset = $el.offset().top;
+        if ($(element).hasClass('animation')) {
+            var $el = $(element);
 
-        if ($el.hasClass('scrum')) {
-            var bottomOffset = $el.offset().top - ($w.height() * 0.1);
+            var topOffset = $el.offset().top  - ($w.height() * 0.5);
+            var bottomOffset = $el.offset().top;
+
+            if ($el.hasClass('scrum')) {
+                var bottomOffset = $el.offset().top - ($w.height() * 0.1);
+            }
+
+            if ($el.hasClass('dirt')) {
+                var bottomOffset = $el.offset().top + ($w.height() * 0.2);
+            }
+
+            $el.scrollMotion({
+                top: topOffset,
+                bottom: bottomOffset
+            });
         }
-
-        if ($el.hasClass('dirt')) {
-            var bottomOffset = $el.offset().top + ($w.height() * 0.2);
-        }
-
-        $el.scrollMotion({
-            top: topOffset,
-            bottom: bottomOffset
-        });
     }
 };
 var lightboxImage = function(element) {
