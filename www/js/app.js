@@ -16,6 +16,16 @@ var $enlarge;
 var $intro_advance;
 var $graphic_stats_year;
 var $side_by_sides;
+var $ambient_audio;
+var $ambient_player;
+var $toggle_ambient;
+var audio_supported = true;
+var ambient_is_paused = true;
+var ambient_start = 0;
+var ambient_end = 33;
+var currently_playing = false;
+var volume_ambient_active = 1;
+var volume_ambient_inactive = 0.1;
 var aspect_width = 16;
 var aspect_height = 9;
 var audio_supported = true;
@@ -35,6 +45,26 @@ var story_start = 0;
 var story_end_1 = 673;
 var story_end_2 = 771;
 var waypointOffset;
+var AMBIENT_MP3;
+var AMBIENT_OGG;
+var AMBIENT_CUES = {
+    'top': {
+        'up': '0,33',
+        'down': '0,33'
+    },
+    'megaphone': {
+        'up': '0,33',
+        'down': '35,60'
+    },
+    'dirt': {
+        'up': '35,60',
+        'down': '63,74'
+    },
+    'match2': {
+        'up': '63,74',
+        'down': '77,99'
+    }
+}
 
 var unveilImages = function() {
     /*
@@ -139,6 +169,19 @@ var fixImageGridSpacing = function() {
     });
 };
 
+var onAmbientTimeUpdate = function(e) {
+    /*
+    * Handles the time updates for the ambient player.
+    * Stops audio based on cue points rather than the end of the clip.
+    */
+    if (e.jPlayer.status.currentTime > parseInt(ambient_end, 0)) {
+
+        // Don't pause the player, stop the player.
+        $ambient_player.jPlayer('stop');
+        currently_playing = false;
+    }
+};
+
 var onStoryTimeUpdate = function(e) {
     /*
     * Handles the time updates for the story player.
@@ -166,21 +209,6 @@ var onStoryTimeUpdate = function(e) {
 
     // Write the current time to our time div.
     $(this).next().find('.current-time').text(time_text);
-};
-
-var onBeginClick = function() {
-    /*
-    * Handles clicks on the begin button.
-    */
-
-    // If this is a mobile device, start up the waterworks.
-    if (Modernizr.touch) { $( "#content" ).addClass( "touch-begin" ); }
-
-    // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
-
-    // Don't do anything else.
-    return false;
 };
 
 var buttonToggleCaptionClick = function() {
@@ -262,12 +290,117 @@ var onWindowScroll = function() {
     }
 };
 
-var onIntroAdvanceClick = function() {
+var onBeginClick = function() {
     /*
-    * Click handler on intro advance.
+    * Handles clicks on the begin button.
     */
 
-    $.smoothScroll({ speed: 800, scrollTarget: '#intro-copy' });
+    // If this is a mobile device, start up the waterworks.
+    if (Modernizr.touch) { $( "#content" ).addClass( "touch-begin" ); }
+
+    $toggle_ambient.removeClass("ambi-mute");
+
+    // If this is a mobile device, start up the waterworks.
+    if (Modernizr.touch) {
+        onAmbientPlayerReady();
+        $( "#content" ).addClass( "touch-begin" );
+    }
+
+    // On all devices, start playing the audio.
+    $ambient_player.jPlayer('play', ambient_start);
+
+    //show the mute button
+    $( "body" ).addClass( "ambient-begin" );
+
+    // Smooth scroll us to the intro.
+    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
+
+    // Unpause.
+    ambient_is_paused = false;
+
+    // Don't do anything else.
+    return false;
+};
+
+var playAudio = function(times) {
+    /*
+    * Plays audio.
+    * Requires start and end cue points as a string, times, in this format:
+    * "<starting cue point in seconds>, <ending cue point in seconds>"
+    * Fades out existing audio clip if one is currently playing.
+    */
+
+    console.log(times)
+
+    // Set the start and ent times as ints.
+    ambient_start = parseInt(times.split(',')[0], 0);
+    ambient_end = parseInt(times.split(',')[1], 0);
+
+    var init = function() {
+        /*
+        * Initializes the actual audio.
+        * If we're paused, update the state and the start_time for the player.
+        * Just don't actually play any audio.
+        */
+
+        $ambient_player.jPlayer("pause", ambient_start);
+
+        if (ambient_is_paused) {
+            return;
+        }
+
+        $ambient_player.jPlayerFade().to(1000, 0, volume_ambient_active);
+        $ambient_player.jPlayer("play");
+        currently_playing = true;
+    };
+
+    // Test if we're in the middle of a currently playing clip.
+    if (currently_playing) {
+
+        // If in a currently playing clip, fade the previous clip before starting this one.
+        $ambient_player.jPlayerFade().to(1000, volume_ambient_active, 0, function(){
+            init();
+        });
+    } else {
+
+        // Start this clip, otherwise.
+        init();
+    }
+};
+
+var onAmbientPlayerReady = function() {
+    /*
+    * A helper function for declaring the AMBIENT PLAYER to be ready.
+    * Loads on button click for iOS/mobile.
+    * Loads on initialization for desktop.
+    */
+    $ambient_player.jPlayer('setMedia', {
+        mp3: AMBIENT_MP3,
+        oga: AMBIENT_OGG
+    }).jPlayer('pause', ambient_start);
+};
+
+var onToggleAmbientClick =  function() {
+    /*
+    * Handles the "mute/pause" button clicks.
+    */
+    $(this).toggleClass("ambi-mute");
+
+    // Don't like this but it's viable.
+    // We've got a global "is paused" state, too.
+    if ($(this).hasClass('ambi-mute')) {
+
+        // If the mute button is on, pause the audio.
+        ambient_is_paused = true;
+        $ambient_player.jPlayer('pause');
+
+    } else {
+
+        // Otherwise, let the player play.
+        ambient_is_paused = false;
+        $ambient_player.jPlayer('play');
+
+    }
 };
 
 var onWaypointReached = function(element, direction) {
@@ -295,6 +428,11 @@ var onWaypointReached = function(element, direction) {
         }
     }
 
+    if (AMBIENT_CUES[waypoint]) {
+        var cuepoints = AMBIENT_CUES[waypoint][direction];
+        playAudio(cuepoints);
+    }
+
     // If this is a chapter waypoint, run the chapter transitions.
     if ($(element).children('.edge-to-edge')){
         $(element).addClass('chapter-active');
@@ -307,7 +445,7 @@ var onWaypointReached = function(element, direction) {
 
         var topOffset = $el.offset().top  - ($w.height() * 0.5);
         var bottomOffset = $el.offset().top;
-        
+
         if ($el.hasClass('scrum')) {
             var bottomOffset = $el.offset().top - ($w.height() * 0.1);
         }
@@ -423,15 +561,40 @@ var onRemoveLightbox = function() {
     $('body').css({ overflow: 'auto' });
 };
 
-var setUpAudio = function(selector) {
+var setUpAudio = function() {
     /*
     * Sets up the story audio player.
     */
+
     var urlBase = APP_CONFIG.S3_BASE_URL;
     if (urlBase == 'http://127.0.0.1:8000') {
         urlBase = 'http://stage-apps.npr.org'
     }
-    selector.jPlayer({
+
+    AMBIENT_MP3 = urlBase + '/buzkashi/assets/audio/ambibed_2.mp3';
+    AMBIENT_OGG = urlBase + '/buzkashi/assets/audio/ambibed_2.ogg';
+
+ // Load the ambient audio player.
+    // Set up a ready function.
+    var ready_func = onAmbientPlayerReady;
+
+    // If it's mobile, don't load a ready function.
+    if (Modernizr.touch){
+        ready_func = null;
+    }
+
+    // Set up the ambient player.
+    $ambient_player.jPlayer({
+        ready: ready_func,
+        swfPath: 'js/lib',
+        cssSelectorAncestor: '#jp_container_2',
+        loop: false,
+        supplied: 'mp3, oga',
+        timeupdate: onAmbientTimeUpdate,
+        volume: volume_ambient_active
+    });
+
+    $story_player.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
                 mp3: urlBase + '/buzkashi/assets/audio/part-1.mp3',
@@ -469,6 +632,30 @@ var setupWaypoints = function() {
     }, { offset: waypointOffset });
 }
 
+var on_toggle_ambient_click =  function() {
+    /*
+    * Handles the "mute/pause" button clicks.
+    */
+    $(this).toggleClass("ambi-mute");
+
+    // Don't like this but it's viable.
+    // We've got a global "is paused" state, too.
+    if ($(this).hasClass('ambi-mute')) {
+
+        // If the mute button is on, pause the audio.
+        ambient_is_paused = true;
+        $ambient_player.jPlayer('pause');
+
+    } else {
+
+        // Otherwise, let the player play.
+        ambient_is_paused = false;
+        $ambient_player.jPlayer('play');
+
+    }
+    console.log(ambient_is_paused);
+};
+
 $(document).ready(function() {
     $container = $('#content');
     $titlecard = $('.titlecard');
@@ -482,9 +669,11 @@ $(document).ready(function() {
     $overlay = $('#fluidbox-overlay');
     $story_player_button = $('#jp_container_1 .jp-play');
     $enlarge = $('.enlarge');
-    $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
+    $toggle_ambient = $( '.toggle-ambi' );
+    $ambient_audio = $('#audio-ambient');
+    $ambient_player = $('#pop-audio-ambient');
     waypointOffset = $w.height() / 2;
 
     // Global window events.
@@ -496,12 +685,12 @@ $(document).ready(function() {
     $button_download_audio.on('click', onButtonDownloadAudioClick);
     $button_toggle_caption.on('click', buttonToggleCaptionClick);
     $enlarge.on('click', onLightboxClick);
-    $intro_advance.on('click', onIntroAdvanceClick);
     $nav.on('click', onNavClick);
     $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
+    $toggle_ambient.on('click', on_toggle_ambient_click);
 
     // Events that need to be initialized.
-    setUpAudio($story_player);
+    setUpAudio();
     setupSharePopover();
     onWindowResize();
     fixImageGridSpacing();

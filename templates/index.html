@@ -45,7 +45,7 @@
                     <!--</section>-->
                 {% endif %}
             {% endif %}
-            
+
             {% include "%s.html"|format(row.template) ignore missing %}
 
         {% endfor %}
@@ -115,6 +115,10 @@
 </div>
 <!-- /content -->
 <div class="controls">
+    <ul class="toggle-ambi ambi-mute">
+        <li class="ambient-on"><i class="fa fa-volume-up"></i></li>
+        <li class="ambient-off"><i class="fa fa-volume-off"></i></li>
+    </ul><!--/toggle-ambi-->
     <ul class="social-nav nav">
         <li class="share">
             <p class="social-nav-item">
@@ -126,9 +130,22 @@
                 <span class="comment-count"></span>
                 <strong>comments</strong>
             </a>
-            
+
         </li>
     </ul>
+</div>
+<div id="audio-ambient">
+    <div id="pop-audio-ambient" class="jp-jplayer"></div>
+    <div id="jp_container_2" class="jp-audio">
+        <div class="jp-type-single">
+            <div class="jp-gui jp-interface">
+                <div class="jp-controls">
+                    <a href="javascript:;" class="jp-play nav-btn" tabindex="1" title="play"><i class="fa fa-play"></i></a>
+                    <a href="javascript:;" class="jp-pause nav-btn" tabindex="1" style="display: none;" title="pause"><i class="fa fa-pause"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 {% block extra_foot_js %}
