@@ -570,11 +570,11 @@ var setUpAudio = function() {
 
     var urlBase = APP_CONFIG.S3_BASE_URL;
     if (urlBase == 'http://127.0.0.1:8000') {
-        urlBase = 'http://stage-apps.npr.org'
+        urlBase = 'http://stage-apps.npr.org/buzkashi'
     }
 
-    AMBIENT_MP3 = urlBase + '/buzkashi/assets/audio/ambibed_2.mp3';
-    AMBIENT_OGG = urlBase + '/buzkashi/assets/audio/ambibed_2.ogg';
+    AMBIENT_MP3 = urlBase + '/assets/audio/ambibed_2.mp3';
+    AMBIENT_OGG = urlBase + '/assets/audio/ambibed_2.ogg';
 
  // Load the ambient audio player.
     // Set up a ready function.
@@ -599,8 +599,8 @@ var setUpAudio = function() {
     $story_player.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: urlBase + '/buzkashi/assets/audio/part-1.mp3',
-                oga: urlBase + '/buzkashi/assets/audio/part-1.ogg'
+                mp3: urlBase + '/assets/audio/part-1.mp3',
+                oga: urlBase + '/assets/audio/part-1.ogg'
             }).jPlayer('pause');
         },
         cssSelectorAncestor: '#jp_container_1',
