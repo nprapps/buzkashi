@@ -49,12 +49,12 @@ var AMBIENT_MP3;
 var AMBIENT_OGG;
 var AMBIENT_CUES = {
     'top': {
-        'up': '2,33',
-        'down': '2,33'
+        'up': '1,33',
+        'down': '1,33'
     },
     'megaphone': {
-        'up': '2,33',
-        'down': '35,60'
+        'up': '1,33',
+        'down': '33,60'
     },
     'dirt': {
         'up': '35,60',
@@ -676,7 +676,7 @@ $(document).ready(function() {
     $toggle_ambient = $( '.toggle-ambi' );
     $ambient_audio = $('#audio-ambient');
     $ambient_player = $('#pop-audio-ambient');
-    waypointOffset = $w.height() / 2;
+    waypointOffset = $w.height() * .66;
 
     // Global window events.
     $w.on('scroll', onWindowScroll);
