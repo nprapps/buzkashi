@@ -4,7 +4,6 @@ var $titlecard_wrapper;
 var $w = $(window);
 var $story_audio;
 var $story_player;
-//var $story_player_2;
 var $waypoints;
 var $nav;
 var $begin;
@@ -17,6 +16,16 @@ var $enlarge;
 var $intro_advance;
 var $graphic_stats_year;
 var $side_by_sides;
+var $ambient_audio;
+var $ambient_player;
+var $toggle_ambient;
+var audio_supported = true;
+var ambient_is_paused = true;
+var ambient_start = 2;
+var ambient_end = 33;
+var currently_playing = false;
+var volume_ambient_active = 0.8;
+var volume_ambient_inactive = 0.1;
 var aspect_width = 16;
 var aspect_height = 9;
 var audio_supported = true;
@@ -35,7 +44,27 @@ var graphic_height = 175;
 var story_start = 0;
 var story_end_1 = 673;
 var story_end_2 = 771;
-
+var waypointOffset;
+var AMBIENT_MP3;
+var AMBIENT_OGG;
+var AMBIENT_CUES = {
+    'top': {
+        'up': '1,33',
+        'down': '1,33'
+    },
+    'megaphone': {
+        'up': '1,33',
+        'down': '33,60'
+    },
+    'dirt': {
+        'up': '35,60',
+        'down': '63,74'
+    },
+    'match2': {
+        'up': '63,74',
+        'down': '77,99'
+    }
+}
 
 var unveilImages = function() {
     /*
@@ -46,7 +75,9 @@ var unveilImages = function() {
         // If we're on a touch device, just load all the images.
         // Seems backwards, but iOS Safari and Android have terrible scroll event
         // handling that doesn't allow unveil to progressively load images.
-        $container.find('img').unveil($(document).height());
+        $container.find('img').unveil(
+            $(document).height()
+        );
     }
     else {
         // Otherwise, start loading at 3x the window height.
@@ -66,13 +97,16 @@ var subResponsiveImages = function() {
         // Loop over our images ...
         _.each($container.find('img'), function(img){
 
-            // If the image has a data-src attribute ...
-            if ($(img).attr('data-src')){
-
+            if ($(img).attr('data-src')) {
                 // Sub in the responsive image from that data-src attribute.
-                var responsive_image = $(img).attr('data-src').replace('_1500', '_750');
+                var responsive_image = $(img).attr('data-src').replace('.', '-16x9-m.');
                 $(img).attr('data-src', responsive_image);
             }
+        });
+
+        _.each($container.find('.animation').find('img'), function(img){
+            var responsive_image = $(img).attr('src').replace('.', '-16x9-m.');
+            $(img).attr('src', responsive_image);
         });
     }
 
@@ -103,22 +137,24 @@ var onWindowResize = function() {
         h = w_height;
     }
 
+    // Dynamically size and style the titlecard.
     $titlecard.width(w + 'px').height(h + 'px');
     $titlecard.css('left', ((w_width - w) / 2) + 'px');
     $titlecard.css('top', ((w_height - h) / 2) + 'px');
     $titlecard_wrapper.height(w_height + 'px');
-    //$opener.height($w.height() + 'px');
     $container.css('marginTop', w_height + 'px');
 
-    resizeFilmstrip();
-
-
-
-    // set the image grid spacing properly
+    // Set the image grid spacing properly
+    // and re-initialize the waypoints.
     fixImageGridSpacing();
+    setupWaypoints();
 };
 
 var fixImageGridSpacing = function() {
+    /*
+    * Adjusts the image grid for the side-by-side templates.
+    * Handles some edge cases where on small screens we need fewer margins.
+    */
     _.each($side_by_sides, function(side_by_side) {
         if ($w.width() < 992) {
             if ($(side_by_side).next().hasClass('side-by-side-wrapper')) {
@@ -133,18 +169,28 @@ var fixImageGridSpacing = function() {
     });
 };
 
-var onStoryTimeUpdate = function(e) {
-    var this_player = e.currentTarget.id;
-    var story_end;
-    if (this_player == 'pop-audio_1') {
-        story_end = story_end_1;
-    } /*else if (this_player == 'pop-audio_2') {
-        story_end = story_end_2;
-    }*/
+var onAmbientTimeUpdate = function(e) {
+    /*
+    * Handles the time updates for the ambient player.
+    * Stops audio based on cue points rather than the end of the clip.
+    */
+    if (e.jPlayer.status.currentTime > parseInt(ambient_end, 0)) {
 
+        // Don't pause the player, stop the player.
+        $ambient_player.jPlayer('stop');
+        currently_playing = false;
+    }
+};
+
+var onStoryTimeUpdate = function(e) {
     /*
     * Handles the time updates for the story player.
+    * In particular, writes the time elapsed/remaining to the player div.
     */
+
+    // Set up the time for when this story ends.
+    var this_player = e.currentTarget.id;
+    var story_end = story_end_1;
 
     // If we reach the end, stop playing AND send a Google event.
     if (e.jPlayer.status.currentTime > parseInt(story_end, 0)) {
@@ -165,28 +211,13 @@ var onStoryTimeUpdate = function(e) {
     $(this).next().find('.current-time').text(time_text);
 };
 
-var onBeginClick = function() {
-    /*
-    * Handles clicks on the begin button.
-    */
-
-    // If this is a mobile device, start up the waterworks.
-    if (Modernizr.touch) {
-        $( "#content" ).addClass( "touch-begin" );
-    }
-
-    // Smooth scroll us to the intro.
-    $.smoothScroll({ speed: 1500, scrollTarget: '#content' });
-
-    // Don't do anything else.
-    return false;
-};
-
 var buttonToggleCaptionClick = function() {
     /*
     * Click handler for the caption toggle.
     */
     _gaq.push(['_trackEvent', 'Captions', 'Clicked caption button', APP_CONFIG.PROJECT_NAME, 1]);
+
+    // Toggle the captions!
     $( this ).parent( ".captioned" ).toggleClass('cap-on');
 };
 
@@ -199,25 +230,17 @@ var onNavClick = function(){
 
     // If the chapter has an edge_to_edge, offset the smoothScroll
 
+    // Check for edge-to-edge existence.
     var edge_to_edge = $('#' + hash).children('.edge-to-edge');
-    var has_edge_to_edge;
 
-    if (edge_to_edge.length > 0) {
-        has_edge_to_edge = true;
-    }
-    else {
-        has_edge_to_edge = false;
-    }
+    // Set up the base smooth scroll options.
+    var scrollOptions = { speed: 800, scrollTarget: '#' + hash }
 
-    var edge_to_edge_margin = parseInt($(edge_to_edge).css('margin-top'));
-    console.log(edge_to_edge_margin);
+    // If there's edge-to-edge, set a new smooth scroll option.
+    if (edge_to_edge.length > 0) { scrollOptions['offset'] = parseInt($(edge_to_edge).css('margin-top')); }
 
-    if (has_edge_to_edge == true) {
-        $.smoothScroll({ offset: edge_to_edge_margin, speed: 800, scrollTarget: '#' + hash });
-    }
-    else {
-        $.smoothScroll({ speed: 800, scrollTarget: '#' + hash });
-    }
+    // SmoothScroll to the correct thing now.
+    $.smoothScroll(scrollOptions);
 
     return false;
 };
@@ -225,10 +248,9 @@ var onNavClick = function(){
 var onLightboxClick = function() {
     /*
     * Click handler for lightboxed photos.
+    * Nothing for touch devices.
     */
-    if (!Modernizr.touch) {
-        lightboxImage($(this).find('img'));
-    }
+    if (!Modernizr.touch) { lightboxImage($(this).find('img')); }
 };
 
 var onButtonDownloadAudioClick = function(){
@@ -242,6 +264,7 @@ var onStoryPlayerButtonClick = function(e){
     /*
     * Click handler for the story player "play" button.
     */
+    console.log(e);
     _gaq.push(['_trackEvent', 'Audio', 'Played audio story', APP_CONFIG.PROJECT_NAME, 1]);
     e.data.player.jPlayer("pauseOthers");
     e.data.player.jPlayer('play');
@@ -267,12 +290,117 @@ var onWindowScroll = function() {
     }
 };
 
-var onIntroAdvanceClick = function() {
+var onBeginClick = function() {
     /*
-    * Click handler on intro advance.
+    * Handles clicks on the begin button.
     */
 
-    $.smoothScroll({ speed: 800, scrollTarget: '#intro-copy' });
+    // If this is a mobile device, start up the waterworks.
+    if (Modernizr.touch) { $( "#content" ).addClass( "touch-begin" ); }
+
+    $toggle_ambient.removeClass("ambi-mute");
+
+    // If this is a mobile device, start up the waterworks.
+    if (Modernizr.touch) {
+        onAmbientPlayerReady();
+        $( "#content" ).addClass( "touch-begin" );
+    }
+
+    // On all devices, start playing the audio.
+    $ambient_player.jPlayer('play', ambient_start);
+
+    //show the mute button
+    $( "body" ).addClass( "ambient-begin" );
+
+    // Smooth scroll us to the intro.
+    $.smoothScroll({ speed: 2300, scrollTarget: '#content' });
+
+    // Unpause.
+    ambient_is_paused = false;
+
+    // Don't do anything else.
+    return false;
+};
+
+var playAudio = function(times) {
+    /*
+    * Plays audio.
+    * Requires start and end cue points as a string, times, in this format:
+    * "<starting cue point in seconds>, <ending cue point in seconds>"
+    * Fades out existing audio clip if one is currently playing.
+    */
+
+    console.log(times)
+
+    // Set the start and ent times as ints.
+    ambient_start = parseInt(times.split(',')[0], 0);
+    ambient_end = parseInt(times.split(',')[1], 0);
+
+    var init = function() {
+        /*
+        * Initializes the actual audio.
+        * If we're paused, update the state and the start_time for the player.
+        * Just don't actually play any audio.
+        */
+
+        $ambient_player.jPlayer("pause", ambient_start);
+
+        if (ambient_is_paused) {
+            return;
+        }
+
+        $ambient_player.jPlayerFade().to(1000, 0, volume_ambient_active);
+        $ambient_player.jPlayer("play");
+        currently_playing = true;
+    };
+
+    // Test if we're in the middle of a currently playing clip.
+    if (currently_playing) {
+
+        // If in a currently playing clip, fade the previous clip before starting this one.
+        $ambient_player.jPlayerFade().to(1000, volume_ambient_active, 0, function(){
+            init();
+        });
+    } else {
+
+        // Start this clip, otherwise.
+        init();
+    }
+};
+
+var onAmbientPlayerReady = function() {
+    /*
+    * A helper function for declaring the AMBIENT PLAYER to be ready.
+    * Loads on button click for iOS/mobile.
+    * Loads on initialization for desktop.
+    */
+    $ambient_player.jPlayer('setMedia', {
+        mp3: AMBIENT_MP3,
+        oga: AMBIENT_OGG
+    }).jPlayer('pause', ambient_start);
+};
+
+var onToggleAmbientClick =  function() {
+    /*
+    * Handles the "mute/pause" button clicks.
+    */
+    $(this).toggleClass("ambi-mute");
+
+    // Don't like this but it's viable.
+    // We've got a global "is paused" state, too.
+    if ($(this).hasClass('ambi-mute')) {
+
+        // If the mute button is on, pause the audio.
+        ambient_is_paused = true;
+        $ambient_player.jPlayer('pause');
+
+    } else {
+
+        // Otherwise, let the player play.
+        ambient_is_paused = false;
+        $ambient_player.jPlayer('play');
+
+    }
 };
 
 var onWaypointReached = function(element, direction) {
@@ -283,8 +411,7 @@ var onWaypointReached = function(element, direction) {
     // Get the waypoint name.
     var waypoint = $(element).attr('id');
 
-
-    // Just hard code this because of reasons.
+    // Handle the down direction.
     if (direction == "down") {
         if ($(element).hasClass('chapter')) {
             $('ul.nav li').removeClass('active');
@@ -292,6 +419,7 @@ var onWaypointReached = function(element, direction) {
         }
     }
 
+    // Handle the up direction.
     if (direction == "up") {
         var $previous_element = $(element).prev();
         if ($previous_element.hasClass('chapter')) {
@@ -300,9 +428,38 @@ var onWaypointReached = function(element, direction) {
         }
     }
 
+    if (AMBIENT_CUES[waypoint]) {
+        var cuepoints = AMBIENT_CUES[waypoint][direction];
+        playAudio(cuepoints);
+    }
+
     // If this is a chapter waypoint, run the chapter transitions.
     if ($(element).children('.edge-to-edge')){
         $(element).addClass('chapter-active');
+    }
+
+    // No animation on mobile. Scroll events are evil.
+    if (!Modernizr.touch) {
+
+        if ($(element).hasClass('animation')) {
+            var $el = $(element);
+
+            var topOffset = $el.offset().top  - ($w.height() * 0.5);
+            var bottomOffset = $el.offset().top;
+
+            if ($el.hasClass('scrum')) {
+                var bottomOffset = $el.offset().top - ($w.height() * 0.1);
+            }
+
+            if ($el.hasClass('dirt')) {
+                var bottomOffset = $el.offset().top + ($w.height() * 0.2);
+            }
+
+            $el.scrollMotion({
+                top: topOffset,
+                bottom: bottomOffset
+            });
+        }
     }
 };
 var lightboxImage = function(element) {
@@ -337,21 +494,11 @@ var lightboxImage = function(element) {
         'z-index': 500,
     });
 
+    // Prep the lightbox overlay.
     $('body').css({ overflow: 'hidden' });
-    fadeLightboxIn();
+    $lightbox.css({ opacity: 1 });
 
-    // Transition with debounce.
-
-    // fade = _.debounce(fadeLightboxIn, 100);
-    // fade();
-
-    // Never looks good to have scroll bars appear, adding
-    // several pixels of padding to the body. Make this match
-    // the fade in above.
-    // _.delay(function(){
-    //     $('body').css({ overflow: 'hidden' });
-    // }, 250);
-    // Grab Wes's properly sized width.
+    // Handle the lightbox size depending on window/image orientation.
     var lightbox_width = w;
 
     // Sometimes, this is wider than the window, which is bad.
@@ -397,11 +544,8 @@ var lightboxImage = function(element) {
     });
 
     // Disable scrolling while the lightbox is present.
-    $('body').css({
-        overflow: 'hidden'
-    });
-
     // On click, remove the lightbox.
+    $('body').css({ overflow: 'hidden' });
     $lightbox.on('click', onRemoveLightbox);
 };
 
@@ -414,50 +558,52 @@ var onRemoveLightbox = function() {
     $el = $('#lightbox');
 
     // Fade to black.
-    $el.css({
-        opacity: 0,
-    });
-
-    fadeLightboxOut();
-    $('body').css({ overflow: 'auto' });
-
-    // Debounce the fade.
-    // fade = _.debounce(fadeLightboxOut, 100);
-    // fade();
-
-    // Never looks good to have scroll bars appear, adding
-    // several pixels of padding to the body. Make this match
-    // the fade out above.
-    // _.delay(function(){
-    //     $('body').css({ overflow: 'auto' });
-    // }, 100);
-};
-
-var fadeLightboxIn = function() {
-    /*
-    * Fade in event.
-    */
-    $lightbox.css({
-        opacity: 1
-    });
-};
-
-var fadeLightboxOut = function() {
-    /*
-    * Fade out event.
-    */
+    $el.css({ opacity: 0 });
     $lightbox.remove();
+    $('body').css({ overflow: 'auto' });
 };
 
-var setUpAudio = function(selector, part) {
-    selector.jPlayer({
+var setUpAudio = function() {
+    /*
+    * Sets up the story audio player.
+    */
+
+    var urlBase = APP_CONFIG.S3_BASE_URL;
+    if (urlBase == 'http://127.0.0.1:8000') {
+        urlBase = 'http://stage-apps.npr.org/buzkashi'
+    }
+
+    AMBIENT_MP3 = urlBase + '/assets/audio/ambibed_2.mp3';
+    AMBIENT_OGG = urlBase + '/assets/audio/ambibed_2.ogg';
+
+ // Load the ambient audio player.
+    // Set up a ready function.
+    var ready_func = onAmbientPlayerReady;
+
+    // If it's mobile, don't load a ready function.
+    if (Modernizr.touch){
+        ready_func = null;
+    }
+
+    // Set up the ambient player.
+    $ambient_player.jPlayer({
+        ready: ready_func,
+        swfPath: 'js/lib',
+        cssSelectorAncestor: '#jp_container_2',
+        loop: false,
+        supplied: 'mp3, oga',
+        timeupdate: onAmbientTimeUpdate,
+        volume: volume_ambient_active
+    });
+
+    $story_player.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: 'buzkashi/assets/audio/part-' + part + '.mp3',
-                oga: 'buzkashi/assets/audio/part-' + part + '.ogg'
+                mp3: urlBase + '/assets/audio/part-1.mp3',
+                oga: urlBase + '/assets/audio/part-1.ogg'
             }).jPlayer('pause');
         },
-        cssSelectorAncestor: '#jp_container_' + part,
+        cssSelectorAncestor: '#jp_container_1',
         timeupdate: onStoryTimeUpdate,
         swfPath: 'js/lib',
         supplied: 'mp3, oga',
@@ -465,43 +611,58 @@ var setUpAudio = function(selector, part) {
     });
 };
 
-var setupFilmstrip = function() {
+var setupSharePopover = function() {
     /*
-    * Creates the CSS rules to animate the filmstrip.
+    * Bootstrap sharing popover. Everyone likes to share.
     */
-    var prefixes = [ '-webkit-', '-moz-', '-o-', '' ];
-    var keyframes = '';
-    var filmstrip_steps = 14;
-    for (var i = 0; i < prefixes.length; i++) {
-        var filmstrip = '';
-        for (var f = 0; f < filmstrip_steps; f++) {
-            var current_pct = f * (100/filmstrip_steps);
-            filmstrip += current_pct + '% {background-position:0 -' + (f * 100) + '%;' + prefixes[i] + 'animation-timing-function:steps(1);}';
-        }
-        keyframes += '@' + prefixes[i] + 'keyframes filmstrip {' + filmstrip + '}';
+    $(function () { $('body').popover({ selector: '[data-toggle="popover"]' }); });
+
+    $('.share').popover({
+        'selector': '',
+        'placement': 'top',
+        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
+        'html': 'true'
+    });
+}
+
+var setupWaypoints = function() {
+    /*
+    * Sets up the global waypoints machinery.
+    */
+    $waypoints.waypoint(function(direction){
+        onWaypointReached(this, direction);
+    }, { offset: waypointOffset });
+}
+
+var on_toggle_ambient_click =  function() {
+    /*
+    * Handles the "mute/pause" button clicks.
+    */
+    $(this).toggleClass("ambi-mute");
+
+    // Don't like this but it's viable.
+    // We've got a global "is paused" state, too.
+    if ($(this).hasClass('ambi-mute')) {
+
+        // If the mute button is on, pause the audio.
+        ambient_is_paused = true;
+        $ambient_player.jPlayer('pause');
+
+    } else {
+
+        // Otherwise, let the player play.
+        ambient_is_paused = false;
+        $ambient_player.jPlayer('play');
+
     }
-    var s = document.createElement('style');
-    s.innerHTML = keyframes;
-    document.getElementsByTagName('head')[0].appendChild(s);
-}
-
-var resizeFilmstrip = function() {
-    var $filmstrip_scrum = $('#content').find('.filmstrip-wrapper');
-    var $filmstrip_scrum_wrapper = $('#content').find('.filmstrip-outer-wrapper');
-    var filmstrip_scrum_aspect_width = 800;
-    var filmstrip_scrum_aspect_height = 450;
-    var filmstrip_scrum_width = $filmstrip_scrum_wrapper.width();
-    var filmstrip_scrum_height = Math.ceil((filmstrip_scrum_width * filmstrip_scrum_aspect_height) / filmstrip_scrum_aspect_width);
-    $filmstrip_scrum.width(filmstrip_scrum_width + 'px').height(filmstrip_scrum_height + 'px');
-}
-
+    console.log(ambient_is_paused);
+};
 
 $(document).ready(function() {
     $container = $('#content');
     $titlecard = $('.titlecard');
     $titlecard_wrapper = $('.titlecard-wrapper');
     $story_player = $('#pop-audio_1');
-    //$story_player_2 = $('#pop-audio_2');
     $waypoints = $('.waypoint');
     $nav = $('.nav a');
     $begin = $('.begin-bar');
@@ -509,87 +670,36 @@ $(document).ready(function() {
     $button_toggle_caption = $('.caption-label');
     $overlay = $('#fluidbox-overlay');
     $story_player_button = $('#jp_container_1 .jp-play');
-    //$story_player_button_2 = $('#jp_container_2 .jp-play');
     $enlarge = $('.enlarge');
-    $intro_advance = $("#intro-advance");
     $graphic_stats_year = $('#graphic-stats-year');
     $side_by_sides = $('.side-by-side-wrapper');
+    $toggle_ambient = $( '.toggle-ambi' );
+    $ambient_audio = $('#audio-ambient');
+    $ambient_player = $('#pop-audio-ambient');
+    waypointOffset = $w.height() * .66;
 
-    //share popover
-    $(function () {
-        $('body').popover({
-            selector: '[data-toggle="popover"]'
-        });
-    });
-
-    $('.share').popover({
-        'selector': '',
-        'placement': 'left',
-        'content': '<a target="_blank" href="https://twitter.com/intent/tweet?text=' + APP_CONFIG.TWITTER_SHARE_TEXT + ', via ' + APP_CONFIG.TWITTER_HANDLE + '.&url=' + APP_CONFIG.S3_BASE_URL + '&original_referer=' + APP_CONFIG.TWITTER_HANDLE + '"><i class="fa fa-twitter"></i></a> <a target="_blank" href="http://www.facebook.com/sharer/sharer.php?u=' + APP_CONFIG.S3_BASE_URL + '"><i class="fa fa-facebook-square"></i></a>',
-        'html': 'true'
-      });
-
-    setUpAudio($story_player, 1);
-    //setUpAudio($story_player_2, 2);
-
-
-    $button_toggle_caption.on('click', buttonToggleCaptionClick);
-
-    $begin.on('click', onBeginClick);
-
-    $nav.on('click', onNavClick);
-
-    $enlarge.on('click', onLightboxClick);
-
-    $button_download_audio.on('click', onButtonDownloadAudioClick);
-
-    $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
-    //$story_player_button_2.on('click', {player: $story_player_2}, onStoryPlayerButtonClick);
-
+    // Global window events.
     $w.on('scroll', onWindowScroll);
-
     $w.on('resize', onWindowResize);
 
-    $intro_advance.on('click', onIntroAdvanceClick);
+    // Click events.
+    $begin.on('click', onBeginClick);
+    $button_download_audio.on('click', onButtonDownloadAudioClick);
+    $button_toggle_caption.on('click', buttonToggleCaptionClick);
+    $enlarge.on('click', onLightboxClick);
+    $nav.on('click', onNavClick);
+    $story_player_button.on('click', {player: $story_player}, onStoryPlayerButtonClick);
+    $toggle_ambient.on('click', on_toggle_ambient_click);
 
+    // Events that need to be initialized.
+    setUpAudio();
+    setupSharePopover();
     onWindowResize();
-
-    subResponsiveImages();
-
     fixImageGridSpacing();
-
-    setupFilmstrip();
-
-    $waypoints.waypoint(function(direction){
-        onWaypointReached(this, direction);
-    }, { offset: $w.height() / 2 });
-
-    // CineScroll!
-    _.each(['.scrum', '.megaphone', '.practice', '.dirt', '.match1', '.match2',], function(el) {
-        var $el = $(el);
-
-        // For most animations, begin when the first pixel of
-        // the container becomes visible and continue the
-        // animation until we reach 10px from the top offset.
-        var topOffset = $el.offset().top - $w.height();
-        var bottomOffset = $el.offset().top - 10;
-
-        // For those instances near/at the top of the document,
-        // these calculations won't work. Instead, we need to
-        // set the top offset to 0 and finish the animations
-        // over the whole window height -- with 10px to spare.
-        if (topOffset < 0) {
-            topOffset = 0;
-            bottomOffset = $w.height() - 10;
-        }
-
-        $el.scrollMotion({
-            top: topOffset,
-            bottom: bottomOffset
-        });
-    });
+    subResponsiveImages();
+    setupWaypoints();
 
 });
 
-// Defer pointer events on animated header
-$w.load(function (){ $('header').css({ 'pointer-events': 'auto' }); });
+// For some reason, this needs to be done on load.
+$(window).load(function (){ $('header').css({ 'pointer-events': 'auto' }); });

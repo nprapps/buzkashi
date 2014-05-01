@@ -173,20 +173,6 @@ a:hover, a:active {
     100% {opacity: 0;}
 }
 
-.horseroll {
-	width:100%;
-	margin: 0 auto;
-	height:auto;
-	overflow:hidden;
-	//border-top: 50px solid #fff;
-}
-
-.horseroll img, .horseroll2 img {
-    width: 100%;
-    display: block;
-    height: auto;
-}
-
 //scrollmations (.scrum, .horseroll, .megaphone, .practice
 .scrollmation img {
     width: 100%;
@@ -222,7 +208,7 @@ a:hover, a:active {
     height: 100%;
     overflow: hidden;
     position: absolute;
-    z-index: 100;
+    z-index: 500;
     top: 0;
     left: 0;
     background-color: #000;
@@ -257,17 +243,9 @@ a:hover, a:active {
             }
         }
 
-        .propublica-logo {
-            width: auto;
-            height: 45px;
-            margin: -4px 0 10px 22px;
-            @media @screen-small-above {
-                height: 60px;
-            }
-        }
-
         .titlecard-container {
             .make-row();
+            margin-top: 60px;
         }
 
         .titlecard-content {
@@ -383,16 +361,13 @@ a:hover, a:active {
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('@{img-root}/scrum/scrum02.jpg') no-repeat 50% 50%;
+        background: url('@{img-root}/gallop.jpg') no-repeat top center;
+        /*background: url('@{img-root}/gallop.jpg') no-repeat top center fixed;*/
         .background-size(cover);
-        .opacity(.7);
-
-        @media @screen-medium-above {
-            .opacity(.7);
-        }
+        .opacity(1);
 
         .touch & {
-            background: url('@{img-root}/scrum/scrum02.jpg') no-repeat 50% 50%;
+            background: url('@{img-root}/gallop.jpg') no-repeat 50% 50%;
             .background-size(cover);
         }
     }
@@ -439,19 +414,14 @@ a:hover, a:active {
 //section navigation
 .controls {
     position: fixed;
-    top: 20px;
-    right: 5px;
-    z-index: 99;
+    bottom: 0;
+    left: 0;
+    z-index: 499;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+    height: 40px;
 
-    .touch & {
-        top: 0;
-        right: 0;
-        bottom: auto;
-        @media @screen-small-above {
-            top: 20px;
-            right: 10px;
-        }
-    }
 
     ul {
         list-style: none;
@@ -461,30 +431,33 @@ a:hover, a:active {
 
     .social-nav {
     
-        .touch & {
-            //display: none;
-        }
 
         li {
-            font-size: 15px;
             line-height: 1.5;
             position: relative;
             margin-bottom: 2px;
             
+            
                 .social-nav-item {
-                    background-color: #7598c9;
-                    color: #fff;
+                   
+                    color: #777;
                     margin: 0;
-                    padding: 15px 10px;
                     cursor: pointer;
-                    font-size: 11px;
+                    font-size: 10px;
                     line-height: 1;
-                    font-family: helvetica, arial, sans-serif;
+                    padding: 5px;
+                 
                     font-weight: bold;
                     
                     &:hover {
-                        background-color: #bccae5;
+                        color: #444;
                     }
+                    
+                     @media @screen-small-above {
+                        font-size: 11px;
+                    }
+                    
+                    
                     
                     strong {
                         padding-left: 2px;
@@ -496,20 +469,37 @@ a:hover, a:active {
                 outline: 0;
                 padding: 0;
                 background: transparent;
-                
             }
+        }
+        
+        .share {
+        position: absolute;
+        top: 10px;
+        right: 10px;         
+        }
+        
+        .comments {
+            position: absolute;
+            top: 10px;
+            right: 80px;
         }
     }
 }
+
+
 
 .popover-content {
     i {
         display: block;
         margin: 10px 0;
         cursor: pointer;
-        color: #7598c9;
+        color: #777;
         &:hover {
-            color: #bccae5;
+            color: #555;
+        }
+        .touch & {
+            font-size: 24px;
+            margin: 20px 5px;
         }
     }
 }
@@ -528,15 +518,33 @@ a:hover, a:active {
         font-weight: bold;
         line-height: 1.2;
     }
+//quick guide   
+.quick-guide {
+
+    h3 {
+        font-size: 18px;
+        margin: 0 0 20px 0;
+         @media @screen-small-above {
+            font-size: 18px;
+        }  
+    }
+    
+    //gear
+    
+    .gear {
+        
+    }
     
     //game
 
     .game {
-    
-        h3 {
-            margin: 0 0 20px 0;
-            font-size: 36px;
+        
+        margin-top: 10px;
+        
+        @media @screen-small-above {
+            margin-top: 60px;
         }
+        
     
         p {
             margin: 0;
@@ -548,9 +556,20 @@ a:hover, a:active {
         
         li {
             margin-bottom: 10px;
+            font-size: 13px;
+            @media @screen-small-above {
+                font-size: 17px;
+            }
         }
         
     } 
+    
+    
+}
+
+
+    
+
     
 
     h3, h4 {
@@ -566,9 +585,10 @@ a:hover, a:active {
     h5, p {
         font-size: 13px;
         line-height: 1.4;
-        margin: 30px 0;
+        margin: 15px 0;
         color: #333;
         @media @screen-small-above {
+            margin: 30px 0;
             font-size: 17px;
             line-height: 1.7;
         }
@@ -579,7 +599,6 @@ a:hover, a:active {
     }
 
     .row {
-        margin: 10px 0;
         position: relative;
         @media @screen-small-above {
             margin: 30px 0 30px 0;
@@ -639,13 +658,22 @@ a:hover, a:active {
             i {visibility: visible;}
         }
     }
+    
+    //scrum
+    
+    .scrum {
+        margin-top: 30px;
+    }
 
     // full-grid photo
     .full-grid-wrapper {
         .make-row();
-
-        margin: 10px 0 10px 0;
-
+        margin-bottom: 10px;
+        @media @screen-small-above {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        
         .full-grid {
             .make-md-column(12);
         }
@@ -668,13 +696,12 @@ a:hover, a:active {
     .side-by-side-wrapper {
         .make-row();
 
-        margin: 0;
         @media @screen-small-above { margin-bottom: 30px; }
 
         div {
             margin-bottom: 0;
 
-            &:first-child { margin-bottom: 10px; }
+            &:first-child { margin-bottom: 10px;}
         }
 
         @media @screen-medium-above {
@@ -696,27 +723,28 @@ a:hover, a:active {
         }
 
         .side-by-side {
+            padding: 0;
+            @media @screen-small-above { 
+                padding: 0 15px;
+            }
             .make-md-column(6);
         }
     }
     
-    //full bleed images
-    .image-sequence {
-        position: relative;
+    //megaphone
+    .megaphone {
+        margin-bottom: 30px;
         @media @screen-small-above {
-            margin: 60px 0 30px 0;
-            height: 1000px;
-            overflow: auto;
-            background:url('../assets/img/titlecard.jpg') top right no-repeat; background-position:fixed;
-            background-size: cover;
+            margin-bottom: 80px;
         }
     }
-
+    
     //full bleed images
     .edge-to-edge {
         position: relative;
+        margin: 10px 0;
         @media @screen-small-above {
-            margin: 60px 0 30px 0;
+            margin: 40px 0;
         }
         img {
             display: block;
@@ -756,29 +784,13 @@ a:hover, a:active {
         }
     }
 
-    .text-wrapper {
-        .make-row();
-
-        margin: 60px 0 60px 0;
-
-        .text {
-            .make-md-column(8);
-        }
-    }
-
-    //chapter title animation
-    .chapter-active {
-        @media @screen-medium-above {
-            .edge-to-edge {
-                h2 {.opacity(1);}
-            }
-
-            .more-below {
-                .animation-name(fadeInUp);
-                &.animated{
-                    .animation-duration(1s);
-                }
-            }
+    .text-section {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        
+        @media @screen-small-above {
+             margin-top: 0;
+             margin-bottom: 0;
         }
     }
 
@@ -946,7 +958,7 @@ a:hover, a:active {
             position: absolute;
             bottom: 0px;
             left: 0;
-            z-index: 500;
+            z-index: 498;
             .transition(opacity 1s ease);
             opacity: 0;
 
@@ -996,7 +1008,7 @@ a:hover, a:active {
 
             i {
                 font-size: 26px;
-                color: #fff;
+                color: #ccc;
                 .opacity(.4);
             }
 
@@ -1558,45 +1570,29 @@ a:hover, a:active {
     //map
     
     .map-fade {
-    max-width: 47%;
+    max-width: 70%;
     position: absolute;
-    top: 0;
-    left: 25%;
+    left: 15%;
+    top: -120px;
+    margin-top: 100px;
+        @media @screen-small-above { 
+            top: -40px;
+            margin-top: 10px;
+            max-width: 60%;
+            left: 15%;
+        }
+        
+        @media @screen-medium-above { 
+            max-width: 50%;
+            top: 0;
+            left: 25%;
+        }
     }
     
     .map-full {
         margin-top: 10px;
     }
     
-    /*
-    .map {
-        background-color: #333;
-        padding: 50px 0;
-        
-        h2 {
-            font-size: 70px;
-            color: #eee;
-            text-align: center;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        
-        p {
-            max-width: 800px;
-            color: #ccc;
-            margin: 0 auto;
-            padding-bottom: 50px;
-            text-align: center;
-            font-size: 24px;
-        }
-        
-        img {
-            width: 65%;
-            margin-left: 20%;
-            opacity: .8;
-            margin-bottom: 50px;
-        }
-    }*/
 
 
 }// end content
@@ -1674,7 +1670,7 @@ footer {
 
 /* lightbox */
 #lightbox {
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 1);
     cursor: pointer;
     display: none;
     opacity: 0;
