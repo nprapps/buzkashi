@@ -47,24 +47,6 @@ var story_end_2 = 771;
 var waypointOffset;
 var AMBIENT_MP3;
 var AMBIENT_OGG;
-var AMBIENT_CUES = {
-    'top': {
-        'up': '33,60',
-        'down': '33,60'
-    },
-    'megaphone': {
-        'up': '1,33',
-        'down': '1,33'
-    },
-    'dirt': {
-        'up': '35,60',
-        'down': '63,74'
-    },
-    'match2': {
-        'up': '63,74',
-        'down': '77,99'
-    }
-}
 
 var unveilImages = function() {
     /*
@@ -330,8 +312,6 @@ var playAudio = function(times) {
     * Fades out existing audio clip if one is currently playing.
     */
 
-    console.log(times)
-
     // Set the start and ent times as ints.
     ambient_start = parseInt(times.split(',')[0], 0);
     ambient_end = parseInt(times.split(',')[1], 0);
@@ -428,10 +408,11 @@ var onWaypointReached = function(element, direction) {
         }
     }
 
-    if (AMBIENT_CUES[waypoint]) {
-        var cuepoints = AMBIENT_CUES[waypoint][direction];
-        playAudio(cuepoints);
-    }
+    // Audio waypoints.
+    // if (AMBIENT_CUES[waypoint]) {
+    //     var cuepoints = AMBIENT_CUES[waypoint][direction];
+    //     playAudio(cuepoints);
+    // }
 
     // If this is a chapter waypoint, run the chapter transitions.
     if ($(element).children('.edge-to-edge')){
