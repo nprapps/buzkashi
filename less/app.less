@@ -524,55 +524,54 @@ a:hover, a:active {
     border-bottom: 1px solid #ccc;
     margin-top: 60px;
     margin-bottom: 60px;
-    max-width: 1000px;
+    max-width: 900px;
     color: #666;
-    padding-top: 20px;
+    padding: 10px 0;
 
     h3 {
-        font-size: 18px;
+        font-size: 15px;
         margin: 0 0 20px 0;
-         @media @screen-small-above {
-            font-size: 18px;
+        @media @screen-small-above {
+            font-size: 24px;
         }  
     }
     
-    //gear
+    p {
+        color: #666;
+        margin: 0;
+        font-size: 14px;
+    }
     
+     ol {
+        margin-top: 20px;
+        font-size: 14px;
+        
+        li {
+            margin-bottom: 10px;
+            font-size: 13px;
+            @media @screen-small-above {
+            }
+        }
+    }
+    
+    .quick-col {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    //gear
     .gear {
         
     }
     
     //game
-
     .game {
-        
         margin-top: 10px;
         
         @media @screen-small-above {
             margin-top: 60px;
-        }
-        
-    
-        p {
-            margin: 0;
-        }
-        ol {
-            color: #333;
-            margin-top: 20px;
-            
-            li {
-                margin-bottom: 10px;
-                font-size: 13px;
-                @media @screen-small-above {
-                    font-size: 17px;
-                }
-            }
-        }
-        
-        
-        
+        } 
     } 
-    
     
 }
 

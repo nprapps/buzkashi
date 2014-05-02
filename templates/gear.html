@@ -1,32 +1,31 @@
-<div class="container gear quick-guide"> 
-    <div class="col-md-8 gear-text">
-        {{ row.text }}
-    </div><!-- /new-side -->
-
-    <div class="side-by-side-wrapper waypoint">
-        <div class="side-by-side captioned">
-
-                    <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo }}" alt="{{ row.photo_caption }}" class="img-responsive">
-                    
-                {% if row.photo_caption %}
-                    <div class="caption-text">
-                        <h6>{{ row.photo_caption }}</h6>
-                    </div>
-                    <p class="caption-label"><i class="fa fa-plus-circle"></i> <b>Caption</b></p>
-                {% endif %}
-    
-        </div>
-        <div class="side-by-side captioned">
-                
-                     <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo_2 }}" alt="{{ row.photo_2_caption }}" class="img-responsive">
-                    
-               {% if row.photo_2_caption %}
-                   <div class="caption-text">
-                       <h6>{{ row.photo_2_caption }}</h6>
-                   </div>
-                   <p class="caption-label"><i class="fa fa-plus-circle"></i> <b>Caption</b></p>
-               {% endif %}
+<div class="container gear quick-guide">
+    <div class="row">
+        <div class="col-md-12 quick-col">
+            {{ row.text }}
         </div>
     </div>
+
+    <div class="side-by-side-wrapper">
+        <div class="side-by-side captioned quick-col">
+
+                    <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo }}" alt="{{ row.photo_caption }}" class="img-responsive">
     
-</div><!-- /new-side -->
+        </div>
+        <div class="side-by-side captioned quick-col">
+                     <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo_2 }}" alt="{{ row.photo_2_caption }}" class="img-responsive">
+        {% if row.photo_2_caption %}
+           <div class="caption-text">
+               <h6>{{ row.photo_2_caption }}</h6>
+           </div>
+           <p class="caption-label"><i class="fa fa-plus-circle"></i> <b>Caption</b></p>
+        {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 quick-col">
+            
+        </div>
+    </div>
+</div>
+
+
