@@ -88,7 +88,7 @@ COPY_PATH = 'data/copy.xlsx'
 """
 SHARING
 """
-PROJECT_DESCRIPTION = 'An opinionated project template for (mostly) server-less apps.'
+PROJECT_DESCRIPTION = 'Like polo, but with whips and a headless goat. It\'s the national sport of Afghanistan.'
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 
 # Will be resized to 120x120, can't be larger than 1MB
