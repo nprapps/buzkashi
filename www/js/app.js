@@ -390,6 +390,8 @@ var onWaypointReached = function(element, direction) {
     // Get the waypoint name.
     var waypoint = $(element).attr('id');
 
+    _gaq.push(['_trackEvent', 'Text', 'Waypoint reached: ' + waypoint, APP_CONFIG.PROJECT_NAME, 1]);
+
     // Handle the down direction.
     if (direction == "down") {
         if ($(element).hasClass('chapter')) {
