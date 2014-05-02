@@ -520,50 +520,58 @@ a:hover, a:active {
     }
 //quick guide   
 .quick-guide {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-top: 60px;
+    margin-bottom: 60px;
+    max-width: 900px;
+    color: #666;
+    padding: 10px 0;
 
     h3 {
-        font-size: 18px;
+        font-size: 15px;
         margin: 0 0 20px 0;
-         @media @screen-small-above {
-            font-size: 18px;
+        @media @screen-small-above {
+            font-size: 24px;
         }  
     }
     
-    //gear
-    
-    .gear {
-        
+    p {
+        color: #666;
+        margin: 0;
+        font-size: 14px;
     }
     
-    //game
-
-    .game {
-        
-        margin-top: 10px;
-        
-        @media @screen-small-above {
-            margin-top: 60px;
-        }
-        
-    
-        p {
-            margin: 0;
-        }
-        ol {
-            color: #333;
-            margin-top: 20px;
-        }
+     ol {
+        margin-top: 20px;
+        font-size: 14px;
         
         li {
             margin-bottom: 10px;
             font-size: 13px;
             @media @screen-small-above {
-                font-size: 17px;
             }
         }
-        
-    } 
+    }
     
+    .quick-col {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    //gear
+    .gear {
+        
+    }
+    
+    //game
+    .game {
+        margin-top: 10px;
+        
+        @media @screen-small-above {
+            margin-top: 60px;
+        } 
+    } 
     
 }
 

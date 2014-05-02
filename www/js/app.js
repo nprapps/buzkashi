@@ -49,12 +49,12 @@ var AMBIENT_MP3;
 var AMBIENT_OGG;
 var AMBIENT_CUES = {
     'top': {
-        'up': '1,33',
-        'down': '1,33'
+        'up': '33,60',
+        'down': '33,60'
     },
     'megaphone': {
         'up': '1,33',
-        'down': '33,60'
+        'down': '1,33'
     },
     'dirt': {
         'up': '35,60',
