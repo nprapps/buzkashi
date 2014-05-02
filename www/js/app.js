@@ -42,8 +42,7 @@ var graphic_data_url = 'data/year.csv';
 var graphic_data;
 var graphic_height = 175;
 var story_start = 0;
-var story_end_1 = 673;
-var story_end_2 = 771;
+var story_end_1 = 308;
 var waypointOffset;
 var AMBIENT_MP3;
 var AMBIENT_OGG;
@@ -580,8 +579,8 @@ var setUpAudio = function() {
     $story_player.jPlayer({
         ready: function () {
             $(this).jPlayer('setMedia', {
-                mp3: urlBase + '/assets/audio/part-1.mp3',
-                oga: urlBase + '/assets/audio/part-1.ogg'
+                mp3: urlBase + '/assets/audio/buzkashi.mp3',
+                oga: urlBase + '/assets/audio/buzkashi.ogg'
             }).jPlayer('pause');
         },
         cssSelectorAncestor: '#jp_container_1',
