@@ -424,15 +424,15 @@ var onWaypointReached = function(element, direction) {
         if ($(element).hasClass('animation')) {
             var $el = $(element);
 
-            var topOffset = $el.offset().top  - ($w.height() * 0.5);
+            var topOffset = $el.offset().top  - ($w.height() * 0.2);
             var bottomOffset = $el.offset().top;
 
             if ($el.hasClass('scrum')) {
                 var bottomOffset = $el.offset().top - ($w.height() * 0.1);
             }
-
-            if ($el.hasClass('dirt')) {
-                var bottomOffset = $el.offset().top + ($w.height() * 0.2);
+            
+            if ($el.hasClass('goal')) {
+                var bottomOffset = $el.offset().top - ($w.height() * 0.1);
             }
 
             $el.scrollMotion({
