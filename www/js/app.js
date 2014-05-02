@@ -573,28 +573,28 @@ var setUpAudio = function() {
         urlBase = 'http://stage-apps.npr.org/buzkashi'
     }
 
-    AMBIENT_MP3 = urlBase + '/assets/audio/ambibed_2.mp3';
-    AMBIENT_OGG = urlBase + '/assets/audio/ambibed_2.ogg';
+    // AMBIENT_MP3 = urlBase + '/assets/audio/ambibed_2.mp3';
+    // AMBIENT_OGG = urlBase + '/assets/audio/ambibed_2.ogg';
 
- // Load the ambient audio player.
+    // Load the ambient audio player.
     // Set up a ready function.
-    var ready_func = onAmbientPlayerReady;
+    // var ready_func = onAmbientPlayerReady;
 
     // If it's mobile, don't load a ready function.
-    if (Modernizr.touch){
-        ready_func = null;
-    }
+    // if (Modernizr.touch){
+    //     ready_func = null;
+    // }
 
     // Set up the ambient player.
-    $ambient_player.jPlayer({
-        ready: ready_func,
-        swfPath: 'js/lib',
-        cssSelectorAncestor: '#jp_container_2',
-        loop: false,
-        supplied: 'mp3, oga',
-        timeupdate: onAmbientTimeUpdate,
-        volume: volume_ambient_active
-    });
+    // $ambient_player.jPlayer({
+    //     ready: ready_func,
+    //     swfPath: 'js/lib',
+    //     cssSelectorAncestor: '#jp_container_2',
+    //     loop: false,
+    //     supplied: 'mp3, oga',
+    //     timeupdate: onAmbientTimeUpdate,
+    //     volume: volume_ambient_active
+    // });
 
     $story_player.jPlayer({
         ready: function () {
