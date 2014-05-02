@@ -1,7 +1,7 @@
 <div class="edge-to-edge captioned">
     <img src="assets/img/transparent_1500.png" data-src="assets/img/{{ row.photo }}" alt="{{ row.photo_caption }}" class="img-responsive">
 
-    {% if row.photo_caption %}
+    {% if row.photo_caption != 'None' %}
         <div class="caption-text">
             <h6>{{ row.photo_caption }}</h6>
         </div>
