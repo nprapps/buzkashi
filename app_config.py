@@ -98,7 +98,7 @@ TWITTER_SHARE_TEXT = PROJECT_DESCRIPTION
 
 # 16:9 ("wide") image. FB uses 16:9 in the newsfeed and crops to square in timelines.
 # No documented restrictions on size
-FACEBOOK_IMAGE_URL = 'http://%s/%s/assets/img/twitter.jpg' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
+FACEBOOK_IMAGE_URL = 'http://%s/%s/assets/img/facebook.jpg' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 FACEBOOK_APP_ID = '138837436154588'
 
 # Thumbnail image for Google News / Search.
