@@ -88,17 +88,17 @@ COPY_PATH = 'data/copy.xlsx'
 """
 SHARING
 """
-PROJECT_DESCRIPTION = 'Like polo, but with whips and a headless goat. It\'s the national sport of Afghanistan.'
+PROJECT_DESCRIPTION = "Buzkashi: Afghanistan's national sport is like polo, with a headless goat."
 SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 
 # Will be resized to 120x120, can't be larger than 1MB
-TWITTER_IMAGE_URL = ''
+TWITTER_IMAGE_URL = 'http://%s/%s/assets/img/twitter.jpg' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 TWITTER_HANDLE = '@nprviz'
-TWITTER_SHARE_TEXT = ''
+TWITTER_SHARE_TEXT = PROJECT_DESCRIPTION 
 
 # 16:9 ("wide") image. FB uses 16:9 in the newsfeed and crops to square in timelines.
 # No documented restrictions on size
-FACEBOOK_IMAGE_URL = ''
+FACEBOOK_IMAGE_URL = 'http://%s/%s/assets/img/twitter.jpg' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 FACEBOOK_APP_ID = '138837436154588'
 
 # Thumbnail image for Google News / Search.
@@ -118,7 +118,7 @@ SERVICES
 GOOGLE_ANALYTICS = {
     'ACCOUNT_ID': 'UA-5828686-4',
     'DOMAIN': PRODUCTION_S3_BUCKETS[0],
-    'TOPICS': '' # e.g. '[1014,3,1003,1002,1001]'
+    'TOPICS': '[1149,1125,1004,1002,1001]' # e.g. '[1014,3,1003,1002,1001]'
 }
 
 COMMENT_PROMPT = 'Leave a comment'
