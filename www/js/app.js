@@ -430,7 +430,8 @@ var onWaypointReached = function(element, direction) {
             var bottomOffset = $el.offset().top;
 
             if ($el.hasClass('scrum')) {
-                var bottomOffset = $el.offset().top - ($w.height() * 0.1);
+                var topOffset = $el.offset().top - ($w.height() * 0.5);
+                var bottomOffset = $el.offset().top - ($w.height() * 0.2);
             }
             
             if ($el.hasClass('goal')) {
