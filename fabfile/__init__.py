@@ -110,7 +110,7 @@ def less():
         out_path = 'www/css/%s.less.css' % name
 
         try:
-            local('node_modules/bin/lessc %s %s' % (path, out_path))
+            local('node_modules/less/bin/lessc %s %s' % (path, out_path))
         except:
             print 'It looks like "lessc" isn\'t installed. Try running: "%s"' % NPM_INSTALL_COMMAND
             raise
@@ -122,7 +122,7 @@ def jst():
     """
 
     try:
-        local('node_modules/bin/jst --template underscore jst www/js/templates.js')
+        local('node_modules/universal-jst/bin/jst.js --template underscore jst www/js/templates.js')
     except:
         print 'It looks like "jst" isn\'t installed. Try running: "%s"' % NPM_INSTALL_COMMAND
 
@@ -185,7 +185,7 @@ def render():
     """
     from flask import g
 
-    update_copy()
+    # update_copy()
     assets.sync()
     update_data()
     less()
