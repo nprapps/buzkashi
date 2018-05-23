@@ -83,7 +83,7 @@ DEBUG = True
 COPY EDITING
 """
 COPY_GOOGLE_DOC_KEY = '1N3uO8rcmjPUMCuB73dZoNg9QWrVpwh5k4zbKGHsFVeA'
-COPY_PATH = 'data/copy.xlsx'
+COPY_PATH = 'www/assets/copy.xlsx'
 
 """
 SHARING
@@ -94,7 +94,7 @@ SHARE_URL = 'http://%s/%s/' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 # Will be resized to 120x120, can't be larger than 1MB
 TWITTER_IMAGE_URL = 'http://%s/%s/assets/img/twitter.jpg' % (PRODUCTION_S3_BUCKETS[0], PROJECT_SLUG)
 TWITTER_HANDLE = '@nprviz'
-TWITTER_SHARE_TEXT = PROJECT_DESCRIPTION 
+TWITTER_SHARE_TEXT = PROJECT_DESCRIPTION
 
 # 16:9 ("wide") image. FB uses 16:9 in the newsfeed and crops to square in timelines.
 # No documented restrictions on size
@@ -188,4 +188,3 @@ Run automated configuration
 DEPLOYMENT_TARGET = os.environ.get('DEPLOYMENT_TARGET', None)
 
 configure_targets(DEPLOYMENT_TARGET)
-

@@ -82,7 +82,7 @@ class GoogleDoc(object):
             headers['Authorization'] = "GoogleLogin auth=%s" % self.auth
 
             url_params = { 'key': self.key, 'format': self.file_format }
-            url = self.spreadsheet_url % url_params 
+            url = self.spreadsheet_url % url_params
 
             r = requests.get(url, headers=headers)
 
@@ -92,7 +92,6 @@ class GoogleDoc(object):
 
             if r.status_code != 200:
                 raise KeyError("Error! Your Google Doc does not exist.")
-                
+
             with open('data/%s.%s' % (self.file_name, self.file_format), 'wb') as writefile:
                 writefile.write(r.content)
-

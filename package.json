@@ -21,6 +21,6 @@
   "homepage": "https://github.com/nprapps/buzkashi#readme",
   "dependencies": {
     "less": "^2.7.2",
-    "universal-jst": "^1.0.5"
+    "universal-jst": "nprapps/universal-jst#1.0.6"
   }
 }

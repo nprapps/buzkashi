@@ -17,7 +17,8 @@ from etc.gdocs import GoogleDoc
 import assets
 import utils
 
-NPM_INSTALL_COMMAND = 'npm install less universal-jst -g --prefix node_modules' 
+# NPM_INSTALL_COMMAND = 'npm install less universal-jst -g --prefix node_modules'
+NPM_INSTALL_COMMAND = 'npm install'
 
 """
 Base configuration
@@ -142,8 +143,9 @@ def download_copy():
 def update_copy():
     """
     Fetches the latest Google Doc and updates local JSON.
+    5/23/18 - DISABLED GDOCS CONNECTION
     """
-    download_copy()
+    # download_copy()
 
 @task
 def update_data():
@@ -324,7 +326,7 @@ def install_requirements():
     require('settings', provided_by=[production, staging])
 
     run('%(SERVER_VIRTUALENV_PATH)s/bin/pip install -U -r %(SERVER_REPOSITORY_PATH)s/requirements.txt' % app_config.__dict__)
-    run('cd %s; %s' % (app_config.SERVER_REPOSITORY_PATH, NPM_INSTALL_PATH)) 
+    run('cd %s; %s' % (app_config.SERVER_REPOSITORY_PATH, NPM_INSTALL_PATH))
 
 @task
 def install_crontab():
@@ -375,7 +377,7 @@ def bootstrap():
     local(NPM_INSTALL_COMMAND)
 
     assets.sync()
-    update_copy()
+    # update_copy()
     update_data()
 
 """
